@@ -65,24 +65,24 @@ public class JoystickView extends View {
     }
 
     private void init() {
-        basePaint.setColor(Color.parseColor("#F7F3EF"));
+        basePaint.setColor(Color.parseColor("#F2F3F9"));
         basePaint.setStyle(Paint.Style.FILL);
 
-        baseRingPaint.setColor(Color.parseColor("#E5DCD4"));
+        baseRingPaint.setColor(Color.parseColor("#E0BFBA"));
         baseRingPaint.setStyle(Paint.Style.STROKE);
         baseRingPaint.setStrokeWidth(2f);
 
-        guidePaint.setColor(Color.parseColor("#EDE3DB"));
+        guidePaint.setColor(Color.parseColor("#FFDDC4"));
         guidePaint.setStyle(Paint.Style.STROKE);
         guidePaint.setStrokeWidth(1.5f);
 
-        thumbPaint.setColor(Color.parseColor("#FF6B4E"));
+        thumbPaint.setColor(Color.parseColor("#FF6F59"));
         thumbPaint.setStyle(Paint.Style.FILL);
 
         thumbHighlightPaint.setColor(Color.parseColor("#99FFFFFF"));
         thumbHighlightPaint.setStyle(Paint.Style.FILL);
 
-        textPaint.setColor(Color.parseColor("#A49C96"));
+        textPaint.setColor(Color.parseColor("#8C716C"));
         textPaint.setTextSize(20f);
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setTextAlign(Paint.Align.CENTER);

@@ -28,7 +28,7 @@ public class AxisSliderView extends View {
     }
 
     private int orientation = ORIENTATION_VERTICAL;
-    private int accentColor = Color.parseColor("#FF6B4E");
+    private int accentColor = Color.parseColor("#FF6F59");
     private String positiveLabel = "FWD";
     private String negativeLabel = "REV";
 
@@ -61,14 +61,14 @@ public class AxisSliderView extends View {
     }
 
     private void init() {
-        trackPaint.setColor(Color.parseColor("#F7F3EF"));
+        trackPaint.setColor(Color.parseColor("#F2F3F9"));
         trackPaint.setStyle(Paint.Style.FILL);
 
-        trackBorderPaint.setColor(Color.parseColor("#E5DCD4"));
+        trackBorderPaint.setColor(Color.parseColor("#E0BFBA"));
         trackBorderPaint.setStyle(Paint.Style.STROKE);
         trackBorderPaint.setStrokeWidth(2f);
 
-        centerLinePaint.setColor(Color.parseColor("#D4C8BF"));
+        centerLinePaint.setColor(Color.parseColor("#E0BFBA"));
         centerLinePaint.setStyle(Paint.Style.STROKE);
         centerLinePaint.setStrokeWidth(2f);
 
@@ -78,7 +78,7 @@ public class AxisSliderView extends View {
         thumbCorePaint.setColor(Color.WHITE);
         thumbCorePaint.setStyle(Paint.Style.FILL);
 
-        labelPaint.setColor(Color.parseColor("#78706B"));
+        labelPaint.setColor(Color.parseColor("#58413D"));
         labelPaint.setTextSize(24f);
         labelPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         labelPaint.setTextAlign(Paint.Align.CENTER);
@@ -135,9 +135,9 @@ public class AxisSliderView extends View {
             canvas.drawLine(cx, cy - travel, cx, cy + travel, centerLinePaint);
             canvas.drawLine(cx - 14f, cy, cx + 14f, cy, centerLinePaint);
 
-            labelPaint.setColor(Color.parseColor("#FF6B4E"));
+            labelPaint.setColor(Color.parseColor("#FF6F59"));
             canvas.drawText(positiveLabel, cx, 34f, labelPaint);
-            labelPaint.setColor(Color.parseColor("#A49C96"));
+            labelPaint.setColor(Color.parseColor("#8C716C"));
             canvas.drawText(negativeLabel, cx, h - 18f, labelPaint);
 
             drawThumb(canvas, cx, thumbY, thumbR);
@@ -149,7 +149,7 @@ public class AxisSliderView extends View {
             canvas.drawLine(cx - travel, cy, cx + travel, cy, centerLinePaint);
             canvas.drawLine(cx, cy - 14f, cx, cy + 14f, centerLinePaint);
 
-            labelPaint.setColor(Color.parseColor("#FF6B4E"));
+            labelPaint.setColor(Color.parseColor("#FF6F59"));
             canvas.drawText(negativeLabel, 36f, cy + 8f, labelPaint);
             canvas.drawText(positiveLabel, w - 36f, cy + 8f, labelPaint);
 

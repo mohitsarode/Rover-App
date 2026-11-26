@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
+                android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.08"
                 android:text="AGRI ROVER"
                 android:textColor="@color/text_title"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/bg_badge_offline"
-                android:fontFamily="sans-serif-bold"
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
@@ -84,8 +84,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:fontFamily="sans-serif-bold"
-                    android:text="94%"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="—"
                     android:textColor="@color/text_body"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -142,7 +142,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
                                 android:letterSpacing="0.06"
-                                android:text="AUTONOMOUS PLATFORM"
+                                android:text="ROBOTIC FIELD PLATFORM"
                                 android:textColor="@color/accent_coral"
                                 android:textSize="11sp" />
 
@@ -150,7 +150,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="Agri Rover MK-II"
                                 android:textColor="@color/text_title"
                                 android:textSize="22sp" />
@@ -167,8 +167,8 @@
                         </LinearLayout>
 
                         <ImageView
-                            android:layout_width="68dp"
-                            android:layout_height="68dp"
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_rover_hero" />
@@ -182,31 +182,30 @@
                         android:layout_marginTop="18dp"
                         android:background="@drawable/bg_button_coral_gradient"
                         android:elevation="4dp"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.08"
                         android:text="START REMOTE CONTROL  ›"
                         android:textColor="#FFFFFF"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Core Telemetry Snapshot (3 Warm Floating Cards) -->
+                <!-- Compact telemetry cards: only values supported by the rover are shown. -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="sans-serif-bold"
-                    android:letterSpacing="0.06"
-                    android:text="SYSTEM TELEMETRY"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.08"
+                    android:text="ROVER OVERVIEW"
                     android:textColor="@color/text_muted"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- Soil Hydration Card -->
                     <LinearLayout
                         android:id="@+id/card_home_soil"
                         android:layout_width="0dp"
@@ -216,13 +215,14 @@
                         android:background="@drawable/bg_card_futuristic"
                         android:elevation="2dp"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="SUBSOIL"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.06"
+                            android:text="SOIL MOISTURE"
                             android:textColor="@color/text_muted"
                             android:textSize="10sp" />
 
@@ -230,62 +230,23 @@
                             android:id="@+id/tv_home_soil_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif-black"
-                            android:text="38%"
+                            android:layout_marginTop="7dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="—%"
                             android:textColor="@color/accent_coral"
-                            android:textSize="20sp" />
+                            android:textSize="26sp" />
 
                         <TextView
                             android:id="@+id/tv_home_soil_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="3dp"
                             android:fontFamily="sans-serif"
-                            android:text="Optimal Moisture"
+                            android:text="No probe reading yet"
                             android:textColor="@color/text_secondary"
                             android:textSize="11sp" />
                     </LinearLayout>
 
-                    <!-- Chemical Tank Card -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="3dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_card_futuristic"
-                        android:elevation="2dp"
-                        android:orientation="vertical"
-                        android:padding="14dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="SPRAYER"
-                            android:textColor="@color/text_muted"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif-black"
-                            android:text="READY"
-                            android:textColor="@color/status_online"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif"
-                            android:text="Relay Valve (1s)"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Propulsion Card -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -294,13 +255,14 @@
                         android:background="@drawable/bg_card_futuristic"
                         android:elevation="2dp"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="4WD MOTORS"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.06"
+                            android:text="DRIVE SYSTEM"
                             android:textColor="@color/text_muted"
                             android:textSize="10sp" />
 
@@ -308,18 +270,18 @@
                             android:id="@+id/tv_home_motion_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif-black"
+                            android:layout_marginTop="7dp"
+                            android:fontFamily="sans-serif-medium"
                             android:text="STOPPED"
                             android:textColor="@color/text_title"
-                            android:textSize="16sp" />
+                            android:textSize="22sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="3dp"
                             android:fontFamily="sans-serif"
-                            android:text="Skid-Steer PWM"
+                            android:text="4WD skid-steer"
                             android:textColor="@color/text_secondary"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -331,7 +293,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.06"
                     android:text="SELECT DRIVING ARCHITECTURE"
                     android:textColor="@color/text_muted"
@@ -355,7 +317,7 @@
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:background="@drawable/bg_button_coral_pill"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="II"
                         android:textColor="@color/accent_coral"
@@ -371,7 +333,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="Dual Thumbs (Split Axis)"
                             android:textColor="@color/text_title"
                             android:textSize="15sp" />
@@ -389,7 +351,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="›"
                         android:textColor="@color/accent_coral"
                         android:textSize="22sp" />
@@ -413,7 +375,7 @@
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:background="@drawable/bg_button_coral_pill"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="360°"
                         android:textColor="@color/accent_coral"
@@ -429,7 +391,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="Single Stick (Omnidirectional)"
                             android:textColor="@color/text_title"
                             android:textSize="15sp" />
@@ -447,7 +409,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="›"
                         android:textColor="@color/accent_coral"
                         android:textSize="22sp" />
@@ -471,7 +433,7 @@
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:background="@drawable/bg_button_coral_pill"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="╋"
                         android:textColor="@color/accent_coral"
@@ -487,7 +449,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="D-Pad Tactile (Step Drive)"
                             android:textColor="@color/text_title"
                             android:textSize="15sp" />
@@ -505,7 +467,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="›"
                         android:textColor="@color/accent_coral"
                         android:textSize="22sp" />
@@ -537,7 +499,7 @@
                     android:layout_height="32dp"
                     android:background="@drawable/bg_pill_neutral"
                     android:ellipsize="end"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:gravity="center"
                     android:maxLines="1"
                     android:paddingHorizontal="14dp"
@@ -583,7 +545,7 @@
                                 android:id="@+id/tv_dual_speed_val"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:gravity="center"
                                 android:text="65%"
                                 android:textColor="@color/accent_coral"
@@ -602,7 +564,7 @@
                                     android:layout_marginEnd="2dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_tactical"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="35"
                                     android:textColor="@color/text_body"
@@ -615,7 +577,7 @@
                                     android:layout_marginEnd="2dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_tactical_active"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="65"
                                     android:textColor="#FFFFFF"
@@ -627,7 +589,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_tactical"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="100"
                                     android:textColor="@color/text_body"
@@ -668,7 +630,7 @@
                             android:layout_height="62dp"
                             android:layout_marginBottom="12dp"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="▲ FORWARD"
                             android:textColor="@color/text_title"
                             android:textSize="12sp" />
@@ -678,7 +640,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62dp"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="▼ REVERSE"
                             android:textColor="@color/text_title"
                             android:textSize="12sp" />
@@ -690,7 +652,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_button_flash"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="LIGHT"
                         android:textColor="@color/accent_amber_text"
                         android:textSize="11sp" />
@@ -746,7 +708,7 @@
                             android:layout_height="36dp"
                             android:layout_marginTop="10dp"
                             android:background="@drawable/bg_button_coral_gradient"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="16dp"
                             android:text="Reconnect"
                             android:textColor="#FFFFFF"
@@ -769,7 +731,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_margin="8dp"
                         android:background="@drawable/bg_card_translucent"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="3dp"
                         android:text="0 FPS"
@@ -785,7 +747,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_margin="8dp"
                         android:background="@drawable/bg_card_translucent"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:minWidth="0dp"
                         android:paddingHorizontal="8dp"
                         android:text="ROTATE 270°"
@@ -799,7 +761,7 @@
                         android:layout_height="36dp"
                         android:layout_alignParentBottom="true"
                         android:background="@drawable/bg_button_spray"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:letterSpacing="0.08"
                         android:text="CHEMICAL SPRAY ACTIVE"
@@ -818,7 +780,7 @@
                         android:background="@drawable/bg_card_translucent"
                         android:clickable="true"
                         android:focusable="true"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
                         android:text="Soil: 38% | Limit: 35%"
@@ -857,7 +819,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="36dp"
                                 android:background="@drawable/bg_button_coral_gradient"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="SPRAY (1.0s)"
                                 android:textColor="#FFFFFF"
                                 android:textSize="10sp" />
@@ -875,7 +837,7 @@
                                     android:layout_marginEnd="2dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_tactical"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="0.5s"
                                     android:textColor="@color/text_body"
@@ -888,7 +850,7 @@
                                     android:layout_marginEnd="2dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_spray_pill_active"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="1.0s"
                                     android:textColor="@color/accent_coral_text"
@@ -900,7 +862,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_button_tactical"
-                                    android:fontFamily="sans-serif-bold"
+                                    android:fontFamily="sans-serif-medium"
                                     android:padding="0dp"
                                     android:text="2.0s"
                                     android:textColor="@color/text_body"
@@ -941,7 +903,7 @@
                             android:layout_height="62dp"
                             android:layout_marginBottom="12dp"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="◄ LEFT"
                             android:textColor="@color/text_title"
                             android:textSize="12sp" />
@@ -951,7 +913,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="62dp"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="RIGHT ►"
                             android:textColor="@color/text_title"
                             android:textSize="12sp" />
@@ -964,7 +926,7 @@
                         android:layout_height="36dp"
                         android:layout_marginBottom="6dp"
                         android:background="@drawable/bg_button_coral_pill"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="PROBE"
                         android:textColor="@color/accent_coral_text"
                         android:textSize="11sp" />
@@ -974,7 +936,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_button_estop"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="E-STOP"
                         android:textColor="@color/accent_red_text"
                         android:textSize="11sp" />
@@ -1030,7 +992,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="SPEED"
                             android:textColor="@color/text_muted"
                             android:textSize="10sp" />
@@ -1039,7 +1001,7 @@
                             android:id="@+id/tv_single_speed_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="65% (MED)"
                             android:textColor="@color/accent_coral"
                             android:textSize="10sp" />
@@ -1058,7 +1020,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="SLOW"
                             android:textColor="@color/text_body"
@@ -1071,7 +1033,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical_active"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="MED"
                             android:textColor="#FFFFFF"
@@ -1083,7 +1045,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="FAST"
                             android:textColor="@color/text_body"
@@ -1097,7 +1059,7 @@
                         android:layout_height="36dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button_coral_gradient"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="SPRAY BURST (1.0s)"
                         android:textColor="#FFFFFF"
                         android:textSize="11sp" />
@@ -1115,7 +1077,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="0.5s"
                             android:textColor="@color/text_body"
@@ -1128,7 +1090,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_spray_pill_active"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="1.0s"
                             android:textColor="@color/accent_coral_text"
@@ -1140,7 +1102,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="2.0s"
                             android:textColor="@color/text_body"
@@ -1161,7 +1123,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_flash"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="LIGHT"
                             android:textColor="@color/accent_amber_text"
@@ -1174,7 +1136,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_coral_pill"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="PROBE"
                             android:textColor="@color/accent_coral_text"
@@ -1187,7 +1149,7 @@
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="TUNE"
                             android:textColor="@color/text_title"
@@ -1199,7 +1161,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1.2"
                             android:background="@drawable/bg_button_estop"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="0dp"
                             android:text="STOP"
                             android:textColor="@color/accent_red_text"
@@ -1223,7 +1185,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_button_tactical_active"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:paddingHorizontal="2dp"
                     android:text="Dual Thumbs"
                     android:textColor="#FFFFFF"
@@ -1236,7 +1198,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_button_tactical"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:paddingHorizontal="2dp"
                     android:text="Single Stick"
                     android:textColor="@color/text_body"
@@ -1249,7 +1211,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="0.85"
                     android:background="@drawable/bg_button_tactical"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:paddingHorizontal="2dp"
                     android:text="D-Pad"
                     android:textColor="@color/text_body"
@@ -1306,7 +1268,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="SUBSURFACE SOIL MOISTURE"
                                 android:textColor="@color/text_muted"
                                 android:textSize="11sp" />
@@ -1316,8 +1278,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:fontFamily="sans-serif-black"
-                                android:text="38%"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="—%"
                                 android:textColor="@color/accent_coral"
                                 android:textSize="40sp" />
                         </LinearLayout>
@@ -1329,128 +1291,32 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:background="@drawable/bg_status_badge"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="5dp"
-                            android:text="OPTIMAL"
-                            android:textColor="@color/status_online"
-                            android:textSize="11sp" />
+                            android:text="NOT MEASURED"
+                            android:textColor="@color/text_muted"
+                            android:textSize="10sp" />
                     </RelativeLayout>
 
-                    <!-- Subsoil Strata Moisture Progress Bars -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Depth Stratification (0-50mm)"
+                        android:text="SENSOR PLACEMENT"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:lineSpacingExtra="3dp"
+                        android:fontFamily="sans-serif"
+                        android:text="One capacitive sensor is lowered to approximately 50 mm for a reading. Separate topsoil and root-zone measurements are not available."
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-
-                    <!-- Layer 1: Topsoil -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif"
-                            android:text="Topsoil (0-15mm)"
-                            android:textColor="@color/text_muted"
-                            android:textSize="11sp" />
-
-                        <ProgressBar
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="0dp"
-                            android:layout_height="8dp"
-                            android:layout_weight="1"
-                            android:max="100"
-                            android:progress="32"
-                            android:progressTint="@color/accent_peach" />
-
-                        <TextView
-                            android:layout_width="38dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:gravity="end"
-                            android:text="32%"
-                            android:textColor="@color/text_body"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Layer 2: Root Zone -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif"
-                            android:text="Root Zone (15-40mm)"
-                            android:textColor="@color/text_muted"
-                            android:textSize="11sp" />
-
-                        <ProgressBar
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="0dp"
-                            android:layout_height="8dp"
-                            android:layout_weight="1"
-                            android:max="100"
-                            android:progress="42"
-                            android:progressTint="@color/accent_coral" />
-
-                        <TextView
-                            android:layout_width="38dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:gravity="end"
-                            android:text="42%"
-                            android:textColor="@color/text_body"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Layer 3: Subsoil Bed -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif"
-                            android:text="Subsoil (40-50mm)"
-                            android:textColor="@color/text_muted"
-                            android:textSize="11sp" />
-
-                        <ProgressBar
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="0dp"
-                            android:layout_height="8dp"
-                            android:layout_weight="1"
-                            android:max="100"
-                            android:progress="40"
-                            android:progressTint="@color/accent_terracotta" />
-
-                        <TextView
-                            android:layout_width="38dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:gravity="end"
-                            android:text="40%"
-                            android:textColor="@color/text_body"
-                            android:textSize="11sp" />
-                    </LinearLayout>
+                        android:textSize="13sp" />
 
                     <Button
                         android:id="@+id/btn_intel_trigger_probe"
@@ -1458,7 +1324,7 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_button_coral_gradient"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="sans-serif-medium"
                         android:text="DEPLOY SUBSOIL PROBE"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
@@ -1470,7 +1336,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.06"
                     android:text="HARDWARE HEALTH"
                     android:textColor="@color/text_muted"
@@ -1507,7 +1373,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="1200ms Active"
                                 android:textColor="@color/status_online"
                                 android:textSize="13sp" />
@@ -1531,7 +1397,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="Active-HIGH"
                                 android:textColor="@color/text_title"
                                 android:textSize="13sp" />
@@ -1567,8 +1433,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-bold"
-                                android:text="-54 dBm (Strong)"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Not reported by firmware"
                                 android:textColor="@color/text_title"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -1591,8 +1457,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-bold"
-                                android:text="24.2 V DC"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Not reported by firmware"
                                 android:textColor="@color/text_title"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -1631,7 +1497,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:text="Telemetry &amp; Kinematics Tuning"
                         android:textColor="@color/text_title"
                         android:textSize="17sp" />
@@ -1657,7 +1523,7 @@
                             android:id="@+id/tv_settings_probe_threshold_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="35%"
                             android:textColor="@color/accent_coral"
                             android:textSize="14sp" />
@@ -1699,7 +1565,7 @@
                             android:id="@+id/tv_settings_turn_sens_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="0.75x"
                             android:textColor="@color/accent_coral"
                             android:textSize="14sp" />
@@ -1736,7 +1602,7 @@
                             android:id="@+id/tv_settings_trim_val"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="0%"
                             android:textColor="@color/accent_coral"
                             android:textSize="14sp" />
@@ -1796,7 +1662,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="Host IP:"
                                 android:textColor="@color/text_muted"
                                 android:textSize="11sp" />
@@ -1823,7 +1689,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="Ctrl Port:"
                                 android:textColor="@color/text_muted"
                                 android:textSize="11sp" />
@@ -1850,7 +1716,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-bold"
+                                android:fontFamily="sans-serif-medium"
                                 android:text="Stream Port:"
                                 android:textColor="@color/text_muted"
                                 android:textSize="11sp" />
@@ -1891,7 +1757,7 @@
                             android:layout_width="85dp"
                             android:layout_height="42dp"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:gravity="center"
                             android:inputType="number"
                             android:text="1000"
@@ -1913,7 +1779,7 @@
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_tactical"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="Reset"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
@@ -1924,7 +1790,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1.3"
                             android:background="@drawable/bg_button_coral_gradient"
-                            android:fontFamily="sans-serif-bold"
+                            android:fontFamily="sans-serif-medium"
                             android:text="Save &amp; Apply"
                             android:textColor="#FFFFFF"
                             android:textSize="12sp" />
@@ -1971,7 +1837,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-bold"
+                android:fontFamily="sans-serif-medium"
                 android:text="Home"
                 android:textColor="@color/accent_coral"
                 android:textSize="10sp" />
@@ -2000,7 +1866,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-bold"
+                android:fontFamily="sans-serif-medium"
                 android:text="Remote"
                 android:textColor="@color/text_muted"
                 android:textSize="10sp" />
@@ -2029,7 +1895,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-bold"
+                android:fontFamily="sans-serif-medium"
                 android:text="Intelligence"
                 android:textColor="@color/text_muted"
                 android:textSize="10sp" />
@@ -2058,7 +1924,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-bold"
+                android:fontFamily="sans-serif-medium"
                 android:text="Settings"
                 android:textColor="@color/text_muted"
                 android:textSize="10sp" />
