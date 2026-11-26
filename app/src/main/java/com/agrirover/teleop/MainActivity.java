@@ -462,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void styleModeButton(Button btn, boolean active) {
         btn.setBackgroundResource(active ? R.drawable.bg_button_tactical_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#78706B"));
+        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#23201E"));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -545,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void styleSpeedBtn(Button btn, boolean active) {
         btn.setBackgroundResource(active ? R.drawable.bg_button_tactical_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#78706B"));
+        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#23201E"));
     }
 
     private void applySprayDuration(int ms) {
@@ -564,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void styleSprayPill(Button btn, boolean active) {
         btn.setBackgroundResource(active ? R.drawable.bg_button_spray_pill_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#FF6B4E" : "#78706B"));
+        btn.setTextColor(Color.parseColor(active ? "#FF6B4E" : "#23201E"));
     }
 
     private void triggerChemicalSpray() {
