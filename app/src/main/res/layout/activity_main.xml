@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- ==================== 1. TOP HUD BAR (LAND ROVER STYLE) ==================== -->
+    <LinearLayout
+        android:id="@+id/hud_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@color/bg_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <ImageButton
+            android:id="@+id/btn_back_landing"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_tactical"
+            android:contentDescription="Back"
+            android:src="@android:drawable/ic_media_previous"
+            android:tint="@color/text_title" />
+
+        <TextView
+            android:id="@+id/tv_hud_conn_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_button_estop"
+            android:fontFamily="sans-serif-bold"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="OFFLINE"
+            android:textColor="@color/accent_red_text"
+            android:textSize="11sp" />
+
+        <!-- Center Motion Vector Pill -->
+        <TextView
+            android:id="@+id/tv_hud_motion_vector"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_elevated"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="10dp"
+            android:text="■ STOPPED | L:0 R:0"
+            android:textColor="@color/accent_green_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_hud_ping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="-- ms"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <ImageButton
+            android:id="@+id/btn_settings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_tactical"
+            android:contentDescription="Settings"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:tint="@color/text_title" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_light" />
+
+    <!-- ==================== 2. MIDDLE WORKSPACE ==================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- LEFT CONTROL COLUMN (Dual Thumbs & D-Pad) -->
+        <LinearLayout
+            android:id="@+id/left_side_panel"
+            android:layout_width="135dp"
+            android:layout_height="match_parent"
+            android:background="@color/bg_main"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Dual Thumbs Left: Speed + Throttle -->
+            <LinearLayout
+                android:id="@+id/left_dual_controls"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <!-- Speed Pill Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_tactical"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-bold"
+                            android:text="SPEED"
+                            android:textColor="@color/text_muted"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:id="@+id/tv_dual_speed_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-bold"
+                            android:text="65%"
+                            android:textColor="@color/accent_green_text"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_dual_speed_35"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_tactical"
+                            android:fontFamily="sans-serif-medium"
+                            android:padding="0dp"
+                            android:text="35%"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="9sp" />
+
+                        <Button
+                            android:id="@+id/btn_dual_speed_65"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_tactical_active"
+                            android:fontFamily="sans-serif-bold"
+                            android:padding="0dp"
+                            android:text="65%"
+                            android:textColor="#FFFFFF"
+                            android:textSize="9sp" />
+
+                        <Button
+                            android:id="@+id/btn_dual_speed_100"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_tactical"
+                            android:fontFamily="sans-serif-medium"
+                            android:padding="0dp"
+                            android:text="100%"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="9sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-bold"
+                    android:gravity="center"
+                    android:letterSpacing="0.06"
+                    android:text="THROTTLE (L)"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <!-- Vertical Throttle Slider -->
+                <com.agrirover.teleop.AxisSliderView
+                    android:id="@+id/slider_throttle"
+                    android:layout_width="100dp"
+                    android:layout_height="170dp"
+                    android:layout_marginTop="6dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- D-Pad Left: FWD / REV Buttons -->
+            <LinearLayout
+                android:id="@+id/left_dpad_controls"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="sans-serif-bold"
+                    android:letterSpacing="0.08"
+                    android:text="PROPULSION"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_dpad_fwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="▲ FORWARD"
+                    android:textColor="@color/text_title"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_dpad_rev"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="▼ REVERSE"
+                    android:textColor="@color/text_title"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Shared Bottom Left: LED Flash -->
+            <Button
+                android:id="@+id/btn_side_flash"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_button_flash"
+                android:fontFamily="sans-serif-bold"
+                android:text="💡 FLASH"
+                android:textColor="@color/accent_amber_text"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- CENTER VIEWPORT: LIVE MJPEG VIDEO STREAM -->
+        <RelativeLayout
+            android:id="@+id/stream_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_tactical"
+            android:clipToOutline="true">
+
+            <ImageView
+                android:id="@+id/iv_camera_stream"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#1E293B"
+                android:contentDescription="Live Camera Feed"
+                android:scaleType="fitCenter" />
+
+            <!-- Offline Placeholder -->
+            <LinearLayout
+                android:id="@+id/layout_stream_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/accent_blue" />
+
+                <TextView
+                    android:id="@+id/tv_stream_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Connecting to ESP32-CAM..."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_stream_target"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="http://192.168.4.1:81/stream"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_retry_stream"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:paddingHorizontal="14dp"
+                    android:text="🔄 Reconnect"
+                    android:textColor="@color/text_title"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Dashed Centering Reticle -->
+            <View
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_reticle_dashed" />
+
+            <!-- FPS Overlay Pill -->
+            <TextView
+                android:id="@+id/tv_hud_fps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_card_tactical"
+                android:fontFamily="sans-serif-bold"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="4dp"
+                android:text="0 FPS"
+                android:textColor="@color/accent_green_text"
+                android:textSize="10sp" />
+
+            <!-- Rotation Button -->
+            <Button
+                android:id="@+id/btn_rotate_stream"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_button_tactical"
+                android:fontFamily="sans-serif-bold"
+                android:minWidth="0dp"
+                android:paddingHorizontal="10dp"
+                android:text="🔄 270°"
+                android:textColor="@color/text_title"
+                android:textSize="11sp" />
+
+            <!-- Active Chemical Spray Alert Banner -->
+            <TextView
+                android:id="@+id/tv_spray_alert_banner"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/bg_button_spray"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:letterSpacing="0.08"
+                android:text="💧 CHEMICAL SPRAY ACTIVE"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <!-- Soil Moisture Reading Banner -->
+            <TextView
+                android:id="@+id/tv_probe_moisture_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_card_tactical"
+                android:fontFamily="sans-serif-bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:text="🌱 Soil: IDLE"
+                android:textColor="@color/accent_green_text"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <!-- RIGHT CONTROL COLUMN (Dual Thumbs & D-Pad) -->
+        <LinearLayout
+            android:id="@+id/right_side_panel"
+            android:layout_width="135dp"
+            android:layout_height="match_parent"
+            android:background="@color/bg_main"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Dual Thumbs Right: Spray Burst + Steering -->
+            <LinearLayout
+                android:id="@+id/right_dual_controls"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <!-- Chemical Spray Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_tactical"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/btn_dual_spray"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_button_spray"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="💧 SPRAY (1.0s)"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="26dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_dual_spray_05"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_tactical"
+                            android:fontFamily="sans-serif-medium"
+                            android:padding="0dp"
+                            android:text="0.5s"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="9sp" />
+
+                        <Button
+                            android:id="@+id/btn_dual_spray_10"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_spray_pill_active"
+                            android:fontFamily="sans-serif-bold"
+                            android:padding="0dp"
+                            android:text="1.0s"
+                            android:textColor="@color/accent_blue_text"
+                            android:textSize="9sp" />
+
+                        <Button
+                            android:id="@+id/btn_dual_spray_20"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_tactical"
+                            android:fontFamily="sans-serif-medium"
+                            android:padding="0dp"
+                            android:text="2.0s"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="9sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-bold"
+                    android:gravity="center"
+                    android:letterSpacing="0.06"
+                    android:text="STEERING (R)"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <!-- Horizontal Steering Slider -->
+                <com.agrirover.teleop.AxisSliderView
+                    android:id="@+id/slider_steering"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:layout_marginTop="6dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- D-Pad Right: LEFT / RIGHT Buttons -->
+            <LinearLayout
+                android:id="@+id/right_dpad_controls"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="sans-serif-bold"
+                    android:letterSpacing="0.08"
+                    android:text="STEERING"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_dpad_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="◄ LEFT"
+                    android:textColor="@color/accent_blue"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_dpad_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="RIGHT ►"
+                    android:textColor="@color/accent_blue"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Shared Bottom Right: Probe + E-Stop -->
+            <Button
+                android:id="@+id/btn_side_probe"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_button_tactical"
+                android:fontFamily="sans-serif-bold"
+                android:text="🌱 PROBE"
+                android:textColor="@color/accent_green_text"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btn_side_estop"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_button_estop"
+                android:fontFamily="sans-serif-bold"
+                android:text="🛑 STOP"
+                android:textColor="@color/accent_red_text"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ==================== 3. SINGLE STICK BOTTOM COCKPIT ==================== -->
+    <LinearLayout
+        android:id="@+id/single_stick_bottom_panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.95"
+        android:background="@color/bg_main"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- Left: 360° Joystick Card -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_tactical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+            <com.agrirover.teleop.JoystickView
+                android:id="@+id/joystick_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <!-- Right: Speed, Spray, Actions Card -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1.2"
+            android:background="@drawable/bg_card_tactical"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Speed Regime -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="SPEED REGIME"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tv_single_speed_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="65% (MED)"
+                        android:textColor="@color/accent_green_text"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_single_speed_35"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_tactical"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="SLOW"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/btn_single_speed_65"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_tactical_active"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="MED"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/btn_single_speed_100"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_tactical"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="FAST"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/border_light" />
+
+            <!-- Spray Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_single_spray"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_button_spray"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="💧 SPRAY BURST (1.0s)"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_single_spray_05"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_tactical"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0.5s"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/btn_single_spray_10"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_spray_pill_active"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="1.0s"
+                        android:textColor="@color/accent_blue_text"
+                        android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/btn_single_spray_20"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_button_tactical"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="2.0s"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/border_light" />
+
+            <!-- Utility Action Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_single_flash"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_flash"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="💡 FLASH"
+                    android:textColor="@color/accent_amber_text"
+                    android:textSize="11sp" />
+
+                <Button
+                    android:id="@+id/btn_single_probe"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="🌱 PROBE"
+                    android:textColor="@color/accent_green_text"
+                    android:textSize="11sp" />
+
+                <Button
+                    android:id="@+id/btn_single_calib"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_tactical"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="📐 CALIB"
+                    android:textColor="@color/text_title"
+                    android:textSize="11sp" />
+
+                <Button
+                    android:id="@+id/btn_single_estop"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:background="@drawable/bg_button_estop"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="🛑 STOP"
+                    android:textColor="@color/accent_red_text"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ==================== 4. BOTTOM MODE SWITCHER NAVIGATION DOCK ==================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/bg_card"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <Button
+            android:id="@+id/btn_mode_dual_thumbs"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_tactical_active"
+            android:fontFamily="sans-serif-bold"
+            android:padding="0dp"
+            android:text="DUAL THUMBS"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btn_mode_single_stick"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_tactical"
+            android:fontFamily="sans-serif-bold"
+            android:padding="0dp"
+            android:text="SINGLE STICK"
+            android:textColor="@color/text_secondary"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btn_mode_dpad"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.85"
+            android:background="@drawable/bg_button_tactical"
+            android:fontFamily="sans-serif-bold"
+            android:padding="0dp"
+            android:text="D-PAD"
+            android:textColor="@color/text_secondary"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🐢"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:id="@+id/sb_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:max="100"
+            android:progress="65"
+            android:progressTint="@color/accent_blue"
+            android:thumbTint="@color/accent_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🐇"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</LinearLayout>
