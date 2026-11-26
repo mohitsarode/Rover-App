@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
     private int streamRotationDeg = 0;
     private boolean isSprayActive = false;
     private boolean isProbing = false;
-    private int lastReportedMoisture = 38;
+    private int lastReportedMoisture = -1;
 
     // D-Pad Touch State
     private float dpadThrottle = 0f;
@@ -162,9 +162,12 @@ public class MainActivity extends AppCompatActivity implements
 
                 @Override
                 public void onError(String errorMessage) {
-                    tvProbeMoistureVal.setText("Soil: ERROR");
-                    tvProbeMoistureVal.setTextColor(Color.parseColor("#DC2626"));
-                    isProbing = false;
+                    // A lost status response does not prove that the physical probe is stowed.
+                    // Keep the drive interlock asserted and retry until firmware confirms idle.
+                    isProbing = true;
+                    tvProbeMoistureVal.setText("Soil status unavailable • drive locked");
+                    tvProbeMoistureVal.setTextColor(Color.parseColor("#D97706"));
+                    mainHandler.postDelayed(probePollRunnable, 1000);
                 }
             });
         }
@@ -433,8 +436,12 @@ public class MainActivity extends AppCompatActivity implements
         ivNavSettings.setColorFilter(tabIndex == TAB_SETTINGS ? activeColor : mutedColor);
         tvNavSettings.setTextColor(tabIndex == TAB_SETTINGS ? activeColor : mutedColor);
 
-        if (tabIndex == TAB_REMOTE) {
-            if (streamer != null) streamer.start();
+        if (streamer != null) {
+            if (tabIndex == TAB_REMOTE) {
+                streamer.start();
+            } else {
+                streamer.stop();
+            }
         }
     }
 
@@ -624,10 +631,13 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onError(String errorMessage) {
-                tvProbeMoistureVal.setText("Soil: FAIL (" + errorMessage + ")");
-                tvProbeMoistureVal.setTextColor(Color.parseColor("#DC2626"));
-                isProbing = false;
-                tvHudMotionVector.setText("STOPPED | L:0 R:0");
+                // Command outcome is ambiguous after a network failure. Do not unlock drive
+                // until /probe_status explicitly reports idle from the rover.
+                isProbing = true;
+                tvProbeMoistureVal.setText("Probe response lost • checking rover state");
+                tvProbeMoistureVal.setTextColor(Color.parseColor("#D97706"));
+                tvHudMotionVector.setText("DRIVE LOCKED • PROBE STATE UNKNOWN");
+                mainHandler.postDelayed(probePollRunnable, 1000);
             }
         });
     }
@@ -808,6 +818,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        mainHandler.removeCallbacks(pingRunnable);
+        mainHandler.post(pingRunnable);
         if (activeTab == TAB_REMOTE && streamer != null) {
             streamer.start();
         }
@@ -816,6 +828,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        mainHandler.removeCallbacks(pingRunnable);
         if (streamer != null) streamer.stop();
         emergencyStopQuiet();
     }

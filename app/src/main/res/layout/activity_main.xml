@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="sans-serif-bold"
-                    android:text="94%"
+                    android:text="N/A"
                     android:textColor="@color/text_body"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -142,7 +142,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
                                 android:letterSpacing="0.06"
-                                android:text="AUTONOMOUS PLATFORM"
+                                android:text="ROBOTIC FIELD PLATFORM"
                                 android:textColor="@color/accent_coral"
                                 android:textSize="11sp" />
 
@@ -232,7 +232,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:fontFamily="sans-serif-black"
-                            android:text="38%"
+                            android:text="—"
                             android:textColor="@color/accent_coral"
                             android:textSize="20sp" />
 
@@ -242,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:fontFamily="sans-serif"
-                            android:text="Optimal Moisture"
+                            android:text="No probe reading yet"
                             android:textColor="@color/text_secondary"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -271,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:fontFamily="sans-serif-black"
-                            android:text="READY"
+                            android:text="Relay-driven"
                             android:textColor="@color/status_online"
                             android:textSize="16sp" />
 
@@ -1317,7 +1317,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:fontFamily="sans-serif-black"
-                                android:text="38%"
+                                android:text="—"
                                 android:textColor="@color/accent_coral"
                                 android:textSize="40sp" />
                         </LinearLayout>
@@ -1332,7 +1332,7 @@
                             android:fontFamily="sans-serif-bold"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="5dp"
-                            android:text="OPTIMAL"
+                            android:text="NOT MEASURED"
                             android:textColor="@color/status_online"
                             android:textSize="11sp" />
                     </RelativeLayout>
@@ -1343,7 +1343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Depth Stratification (0-50mm)"
+                        android:text="Single capacitive probe · approx. 50mm depth"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -1359,7 +1359,7 @@
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif"
-                            android:text="Topsoil (0-15mm)"
+                            android:text="Sensor reading"
                             android:textColor="@color/text_muted"
                             android:textSize="11sp" />
 
@@ -1369,7 +1369,7 @@
                             android:layout_height="8dp"
                             android:layout_weight="1"
                             android:max="100"
-                            android:progress="32"
+                            android:progress="0"
                             android:progressTint="@color/accent_peach" />
 
                         <TextView
@@ -1377,7 +1377,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-bold"
                             android:gravity="end"
-                            android:text="32%"
+                            android:text="—"
                             android:textColor="@color/text_body"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -1394,7 +1394,7 @@
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif"
-                            android:text="Root Zone (15-40mm)"
+                            android:text="Moisture threshold"
                             android:textColor="@color/text_muted"
                             android:textSize="11sp" />
 
@@ -1404,7 +1404,7 @@
                             android:layout_height="8dp"
                             android:layout_weight="1"
                             android:max="100"
-                            android:progress="42"
+                            android:progress="0"
                             android:progressTint="@color/accent_coral" />
 
                         <TextView
@@ -1412,7 +1412,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-bold"
                             android:gravity="end"
-                            android:text="42%"
+                            android:text="—"
                             android:textColor="@color/text_body"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -1429,7 +1429,7 @@
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif"
-                            android:text="Subsoil (40-50mm)"
+                            android:text="Probe cycle"
                             android:textColor="@color/text_muted"
                             android:textSize="11sp" />
 
@@ -1439,7 +1439,7 @@
                             android:layout_height="8dp"
                             android:layout_weight="1"
                             android:max="100"
-                            android:progress="40"
+                            android:progress="0"
                             android:progressTint="@color/accent_terracotta" />
 
                         <TextView
@@ -1447,7 +1447,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-bold"
                             android:gravity="end"
-                            android:text="40%"
+                            android:text="—"
                             android:textColor="@color/text_body"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -1568,7 +1568,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="sans-serif-bold"
-                                android:text="-54 dBm (Strong)"
+                                android:text="Not reported by firmware"
                                 android:textColor="@color/text_title"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -1592,7 +1592,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="sans-serif-bold"
-                                android:text="24.2 V DC"
+                                android:text="Not reported by firmware"
                                 android:textColor="@color/text_title"
                                 android:textSize="13sp" />
                         </LinearLayout>

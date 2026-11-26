@@ -259,8 +259,10 @@ public class RoverApiClient {
     }
 
     public void ping(PingCallback callback) {
-        String url = config.getControlBaseUrl() + "/drive?left=0&right=0";
-        Request request = new Request.Builder().url(url).build();
+        // Probe the firmware's root page instead of sending a zero-PWM drive command.
+        // A "ping" must never interrupt an active joystick command.
+        String url = config.getControlBaseUrl() + "/";
+        Request request = new Request.Builder().url(url).get().build();
         final long t0 = System.currentTimeMillis();
 
         httpClient.newCall(request).enqueue(new Callback() {
