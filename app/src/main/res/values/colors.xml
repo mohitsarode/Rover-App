@@ -14,7 +14,7 @@
     <color name="border_active">#FF6F59</color>
 
     <!-- Coral & Warm Terracotta Gradient Accents -->
-    <color name="accent_coral">#FF6B4E</color>
+    <color name="accent_coral">#FF6F59</color>
     <color name="accent_coral_start">#FC9174</color>
     <color name="accent_coral_end">#AC3323</color>
     <color name="accent_coral_light">#FFDAD4</color>
@@ -50,12 +50,12 @@
     <color name="accent_green_bg">#EBF5F0</color>
     <color name="accent_green_text">#1E563E</color>
     
-    <color name="accent_blue">#FF6B4E</color>
+    <color name="accent_blue">#FF6F59</color>
     <color name="accent_blue_glow">#FFA18C</color>
     <color name="accent_blue_dark">#E04B28</color>
     <color name="accent_blue_bg">#FFF0EC</color>
     <color name="accent_blue_text">#D84315</color>
-    <color name="accent_cyan">#FF6B4E</color>
+    <color name="accent_cyan">#FF6F59</color>
     
     <color name="accent_amber">#D97706</color>
     <color name="accent_amber_bg">#FEF3C7</color>
