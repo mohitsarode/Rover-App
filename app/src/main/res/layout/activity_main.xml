@@ -127,15 +127,19 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <RelativeLayout
+                    <!-- Keep the title/connection details and rover illustration in separate columns. -->
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:orientation="vertical">
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingEnd="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -144,35 +148,40 @@
                                 android:letterSpacing="0.06"
                                 android:text="ROBOTIC FIELD PLATFORM"
                                 android:textColor="@color/accent_coral"
-                                android:textSize="11sp" />
+                                android:textSize="10sp" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif-medium"
-                                android:text="Agri Rover MK-II"
-                                android:textColor="@color/text_title"
-                                android:textSize="22sp" />
-
-                            <TextView
-                                android:id="@+id/tv_home_ip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:maxLines="2"
+                                android:text="Agri Rover MK-II"
+                                android:textColor="@color/text_title"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/tv_home_ip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif"
-                                android:text="192.168.4.1 • AgriRover-CAM-AP"
+                                android:maxLines="2"
+                                android:text="192.168.4.1&#10;AgriRover-CAM-AP"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
                         </LinearLayout>
 
                         <ImageView
-                            android:layout_width="104dp"
-                            android:layout_height="104dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
+                            android:id="@+id/iv_home_rover_hero"
+                            android:layout_width="88dp"
+                            android:layout_height="88dp"
+                            android:layout_marginStart="8dp"
+                            android:contentDescription="Agri Rover illustration"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/ic_rover_hero" />
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <!-- Start Mission / Teleoperation Action Button -->
                     <Button

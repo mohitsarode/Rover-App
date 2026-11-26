@@ -732,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements
         etSettingsCtrlPort.setText(String.valueOf(config.getCtrlPort()));
         etSettingsStreamPort.setText(String.valueOf(config.getStreamPort()));
         etSettingsSprayMs.setText(String.valueOf(config.getSprayMs()));
-        tvHomeIp.setText(config.getHost() + " • AgriRover-CAM-AP");
+        tvHomeIp.setText(config.getHost() + "\nAgriRover-CAM-AP");
     }
 
     private void setupSettingsTabListeners() {
@@ -786,7 +786,7 @@ public class MainActivity extends AppCompatActivity implements
             try { config.setStreamPort(Integer.parseInt(etSettingsStreamPort.getText().toString().trim())); } catch (Exception ignored) {}
             try { config.setSprayMs(Integer.parseInt(etSettingsSprayMs.getText().toString().trim())); } catch (Exception ignored) {}
 
-            tvHomeIp.setText(config.getHost() + " • AgriRover-CAM-AP");
+            tvHomeIp.setText(config.getHost() + "\nAgriRover-CAM-AP");
             streamer.restart();
             Toast.makeText(this, "Settings saved & applied", Toast.LENGTH_SHORT).show();
         });
