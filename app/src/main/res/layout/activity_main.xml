@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="N/A"
+                    android:text="—"
                     android:textColor="@color/text_body"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -167,8 +167,8 @@
                         </LinearLayout>
 
                         <ImageView
-                            android:layout_width="68dp"
-                            android:layout_height="68dp"
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_rover_hero" />

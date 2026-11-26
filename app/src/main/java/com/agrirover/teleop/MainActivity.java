@@ -152,6 +152,13 @@ public class MainActivity extends AppCompatActivity implements
             apiClient.getProbeStatus(new RoverApiClient.ProbeCallback() {
                 @Override
                 public void onStatus(RoverApiClient.ProbeStatus status) {
+                    if (status == null) {
+                        isProbing = true;
+                        tvProbeMoistureVal.setText("Soil status unavailable • drive locked");
+                        tvProbeMoistureVal.setTextColor(Color.parseColor("#D97706"));
+                        mainHandler.postDelayed(probePollRunnable, 1000);
+                        return;
+                    }
                     updateProbeUI(status);
                     if (!status.idle) {
                         mainHandler.postDelayed(probePollRunnable, 500);
@@ -257,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements
 
         sliderThrottle = findViewById(R.id.slider_throttle);
         sliderSteering = findViewById(R.id.slider_steering);
-        sliderSteering.configure(AxisSliderView.ORIENTATION_HORIZONTAL, Color.parseColor("#FF6B4E"), "R", "L");
+        sliderSteering.configure(AxisSliderView.ORIENTATION_HORIZONTAL, Color.parseColor("#FF6F59"), "R", "L");
 
         tvDualSpeedVal = findViewById(R.id.tv_dual_speed_val);
         btnDualSpeed35 = findViewById(R.id.btn_dual_speed_35);
