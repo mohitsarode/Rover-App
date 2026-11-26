@@ -14,7 +14,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 /**
- * Land Rover Clean Automotive 360° Analog Joystick.
+ * Premium Mars Rover 360° Omnidirectional Joystick.
+ * Warm coral gradient knob with smooth capacitive physics.
  */
 public class JoystickView extends View {
 
@@ -23,9 +24,22 @@ public class JoystickView extends View {
         void onMotionStop();
     }
 
-    private JoystickListener listener;
     private RoverConfig config;
+    private JoystickListener listener;
+
     private int speedPercent = 65;
+    private float centerX = 0f;
+    private float centerY = 0f;
+    private float baseRadius = 0f;
+    private float thumbRadius = 0f;
+    private float maxTravelRadius = 0f;
+
+    private float thumbX = 0f;
+    private float thumbY = 0f;
+    private boolean isDragging = false;
+
+    private long lastDispatchTime = 0;
+    private static final long DISPATCH_INTERVAL_MS = 50;
 
     private final Paint basePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint baseRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -34,14 +48,6 @@ public class JoystickView extends View {
     private final Paint thumbPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint thumbHighlightPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    private float centerX, centerY;
-    private float baseRadius, thumbRadius, maxTravelRadius;
-    private float thumbX, thumbY;
-    private boolean isDragging = false;
-
-    private long lastDispatchTime = 0;
-    private static final long DISPATCH_INTERVAL_MS = 50;
 
     public JoystickView(Context context) {
         super(context);
@@ -59,25 +65,25 @@ public class JoystickView extends View {
     }
 
     private void init() {
-        basePaint.setColor(Color.parseColor("#F1F5F9"));
+        basePaint.setColor(Color.parseColor("#F7F3EF"));
         basePaint.setStyle(Paint.Style.FILL);
 
-        baseRingPaint.setColor(Color.parseColor("#CBD5E1"));
+        baseRingPaint.setColor(Color.parseColor("#E5DCD4"));
         baseRingPaint.setStyle(Paint.Style.STROKE);
-        baseRingPaint.setStrokeWidth(3f);
+        baseRingPaint.setStrokeWidth(2f);
 
-        guidePaint.setColor(Color.parseColor("#E2E8F0"));
+        guidePaint.setColor(Color.parseColor("#EDE3DB"));
         guidePaint.setStyle(Paint.Style.STROKE);
-        guidePaint.setStrokeWidth(2f);
+        guidePaint.setStrokeWidth(1.5f);
 
-        thumbPaint.setColor(Color.parseColor("#2563EB")); // Modern automotive blue knob
+        thumbPaint.setColor(Color.parseColor("#FF6B4E"));
         thumbPaint.setStyle(Paint.Style.FILL);
 
-        thumbHighlightPaint.setColor(Color.parseColor("#80FFFFFF"));
+        thumbHighlightPaint.setColor(Color.parseColor("#99FFFFFF"));
         thumbHighlightPaint.setStyle(Paint.Style.FILL);
 
-        textPaint.setColor(Color.parseColor("#64748B"));
-        textPaint.setTextSize(22f);
+        textPaint.setColor(Color.parseColor("#A49C96"));
+        textPaint.setTextSize(20f);
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
@@ -120,16 +126,16 @@ public class JoystickView extends View {
         canvas.drawLine(centerX, centerY - baseRadius, centerX, centerY + baseRadius, guidePaint);
         canvas.drawCircle(centerX, centerY, baseRadius * 0.52f, guidePaint);
 
-        canvas.drawText("360° DRIVE", centerX, centerY + baseRadius - 18f, textPaint);
+        canvas.drawText("360° DRIVE", centerX, centerY + baseRadius - 16f, textPaint);
 
-        int glowColor = isDragging ? 0x402563EB : 0x202563EB;
+        int glowColor = isDragging ? 0x4DFF6B4E : 0x20FF6B4E;
         glowPaint.setShader(new RadialGradient(thumbX, thumbY, thumbRadius * 1.5f,
                 glowColor, Color.TRANSPARENT, Shader.TileMode.CLAMP));
         canvas.drawCircle(thumbX, thumbY, thumbRadius * 1.5f, glowPaint);
 
         canvas.drawCircle(thumbX, thumbY, thumbRadius, thumbPaint);
         canvas.drawCircle(thumbX - thumbRadius * 0.22f, thumbY - thumbRadius * 0.22f,
-                thumbRadius * 0.24f, thumbHighlightPaint);
+                thumbRadius * 0.26f, thumbHighlightPaint);
     }
 
     @Override
@@ -164,25 +170,21 @@ public class JoystickView extends View {
 
         if (distance > maxTravelRadius) {
             float ratio = maxTravelRadius / distance;
-            thumbX = centerX + (dx * ratio);
-            thumbY = centerY + (dy * ratio);
-        } else {
-            thumbX = touchX;
-            thumbY = touchY;
+            dx *= ratio;
+            dy *= ratio;
         }
+
+        thumbX = centerX + dx;
+        thumbY = centerY + dy;
         invalidate();
 
-        float rawThrottle = -(thumbY - centerY) / maxTravelRadius;
-        float rawSteer = (thumbX - centerX) / maxTravelRadius;
-
-        KinematicsHelper.MotionResult res = KinematicsHelper.compute(rawThrottle, rawSteer, speedPercent, config);
+        float normSteer = dx / maxTravelRadius;
+        float normThrottle = -dy / maxTravelRadius;
 
         long now = System.currentTimeMillis();
-        if (now - lastDispatchTime >= DISPATCH_INTERVAL_MS || (res.leftPwm == 0 && res.rightPwm == 0)) {
+        if (now - lastDispatchTime >= DISPATCH_INTERVAL_MS) {
             lastDispatchTime = now;
-            if (listener != null) {
-                listener.onMotionUpdate(res.leftPwm, res.rightPwm, rawThrottle, rawSteer, res.vectorText);
-            }
+            dispatchKinematics(normThrottle, normSteer);
         }
     }
 
@@ -190,8 +192,24 @@ public class JoystickView extends View {
         thumbX = centerX;
         thumbY = centerY;
         invalidate();
+
         if (listener != null) {
             listener.onMotionStop();
         }
+    }
+
+    private void dispatchKinematics(float throttle, float steer) {
+        if (listener == null) return;
+
+        KinematicsHelper.MotionResult result =
+                KinematicsHelper.compute(throttle, steer, speedPercent, config);
+
+        listener.onMotionUpdate(
+                result.leftPwm,
+                result.rightPwm,
+                throttle,
+                steer,
+                result.vectorText
+        );
     }
 }

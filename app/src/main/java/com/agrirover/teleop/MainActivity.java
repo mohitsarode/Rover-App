@@ -1,24 +1,22 @@
 package com.agrirover.teleop;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,54 +26,63 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 /**
- * Main Teleoperation Cockpit supporting 3 Control Modes:
- *  1. DUAL_THUMBS  (Split Vertical Throttle + Horizontal Steering)
- *  2. SINGLE_STICK (60/40 360° Analog Joystick)
- *  3. DPAD         (Discrete Press-and-Hold Directional Buttons)
+ * Premium Mars Rover Teleoperation & Robotics Telematics Application.
+ * Unifies Home/Discover, Remote Control Cockpit, Subsoil Intelligence, and Settings.
  */
 public class MainActivity extends AppCompatActivity implements
         MjpegStreamer.StreamListener,
         JoystickView.JoystickListener {
 
+    public static final String MODE_DUAL_THUMBS = "DUAL_THUMBS";
+    public static final String MODE_SINGLE_STICK = "SINGLE_STICK";
+    public static final String MODE_DPAD = "DPAD";
+
+    public static final int TAB_HOME = 0;
+    public static final int TAB_REMOTE = 1;
+    public static final int TAB_INTELLIGENCE = 2;
+    public static final int TAB_SETTINGS = 3;
+
+    private int activeTab = TAB_HOME;
+    private String activeMode = MODE_SINGLE_STICK;
+
+    // Core Subsystems
     private RoverConfig config;
     private RoverApiClient apiClient;
     private MjpegStreamer streamer;
-    private Vibrator vibrator;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private Vibrator vibrator;
 
-    private String activeMode = LandingActivity.MODE_SINGLE_STICK;
+    // Top Status Bar
+    private TextView tvTopStatusBadge;
+    private TextView tvTopPing;
+    private TextView tvTopBattery;
 
-    // Stream & Top HUD
+    // Content Containers
+    private ScrollView sectionHome;
+    private LinearLayout sectionRemote;
+    private ScrollView sectionIntelligence;
+    private ScrollView sectionSettings;
+
+    // Bottom Navigation Elements
+    private LinearLayout navTabHome, navTabRemote, navTabIntelligence, navTabSettings;
+    private ImageView ivNavHome, ivNavRemote, ivNavIntelligence, ivNavSettings;
+    private TextView tvNavHome, tvNavRemote, tvNavIntelligence, tvNavSettings;
+
+    // Home Section Views
+    private TextView tvHomeIp, tvHomeSoilVal, tvHomeSoilDesc, tvHomeMotionTag;
+    private Button btnHomeStartControl;
+    private LinearLayout cardHomeSoil, cardHomeModeDual, cardHomeModeSingle, cardHomeModeDpad;
+
+    // Remote Section Views
     private ImageView ivCameraStream;
     private View layoutStreamPlaceholder;
-    private TextView tvStreamStatus;
-    private TextView tvStreamTarget;
-    private Button btnRetryStream;
-    private TextView tvHudFps;
-    private TextView tvHudPing;
-    private TextView tvHudConnBadge;
-    private TextView tvHudMotionVector;
-    private TextView tvSprayAlertBanner;
-    private Button btnRotateStream;
-
-    // Mode Containers
-    private View leftSidePanel;
-    private View rightSidePanel;
-    private View leftDualControls;
-    private View rightDualControls;
-    private View leftDpadControls;
-    private View rightDpadControls;
-    private View singleStickBottomPanel;
-
-    // Bottom Mode Pills & Slider
-    private Button btnModeDualThumbs;
-    private Button btnModeSingleStick;
-    private Button btnModeDpad;
-    private SeekBar sbSpeed;
+    private TextView tvStreamStatus, tvHudFps, tvHudMotionVector, tvSprayAlertBanner, tvProbeMoistureVal;
+    private Button btnRetryStream, btnRotateStream;
+    private LinearLayout leftSidePanel, rightSidePanel, singleStickBottomPanel;
+    private LinearLayout leftDualControls, rightDualControls, leftDpadControls, rightDpadControls;
 
     // Dual Thumbs Controls
-    private AxisSliderView sliderThrottle;
-    private AxisSliderView sliderSteering;
+    private AxisSliderView sliderThrottle, sliderSteering;
     private TextView tvDualSpeedVal;
     private Button btnDualSpeed35, btnDualSpeed65, btnDualSpeed100;
     private Button btnDualSpray, btnDualSpray05, btnDualSpray10, btnDualSpray20;
@@ -85,32 +92,46 @@ public class MainActivity extends AppCompatActivity implements
     private TextView tvSingleSpeedVal;
     private Button btnSingleSpeed35, btnSingleSpeed65, btnSingleSpeed100;
     private Button btnSingleSpray, btnSingleSpray05, btnSingleSpray10, btnSingleSpray20;
-    private TextView tvProbeMoistureVal;
-    private Button btnSingleProbe, btnSingleFlash, btnSingleCalib, btnSingleEstop;
+    private Button btnSingleFlash, btnSingleProbe, btnSingleCalib, btnSingleEstop;
 
-    // Side Panel Shared Controls
+    // Shared & Side Controls
     private Button btnSideFlash, btnSideProbe, btnSideEstop;
+    private Button btnModeDualThumbs, btnModeSingleStick, btnModeDpad;
+    private SeekBar sbSpeed;
 
-    // D-Pad State
-    private float dpadThrottle = 0f;
-    private float dpadSteer = 0f;
-    private long lastAxisDispatchTime = 0;
+    // Intelligence Section Views
+    private TextView tvIntelMoistureLarge, tvIntelStatusBadge;
+    private Button btnIntelTriggerProbe;
 
-    // App State
+    // Settings Section Views
+    private SeekBar sbSettingsProbeThreshold, sbSettingsTurnSens, sbSettingsTrim;
+    private TextView tvSettingsProbeThresholdVal, tvSettingsTurnSensVal, tvSettingsTrimVal;
+    private CheckBox cbSettingsInvertThrottle, cbSettingsInvertSteer;
+    private EditText etSettingsHost, etSettingsCtrlPort, etSettingsStreamPort, etSettingsSprayMs;
+    private Button btnSettingsReset, btnSettingsSave;
+
+    // State Variables
     private int currentSpeed = 65;
     private int currentSprayMs = 1000;
     private int flashBrightness = 0;
     private int streamRotationDeg = 0;
     private boolean isSprayActive = false;
     private boolean isProbing = false;
+    private int lastReportedMoisture = 38;
 
+    // D-Pad Touch State
+    private float dpadThrottle = 0f;
+    private float dpadSteer = 0f;
+    private long lastAxisDispatchTime = 0;
+
+    // Periodic Loops
     private final Runnable pingRunnable = new Runnable() {
         @Override
         public void run() {
             if (apiClient != null) {
                 apiClient.ping((success, latencyMs) -> updateConnectionStatus(success, latencyMs));
             }
-            mainHandler.postDelayed(this, 2500);
+            mainHandler.postDelayed(this, 1500);
         }
     };
 
@@ -141,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 @Override
                 public void onError(String errorMessage) {
-                    tvProbeMoistureVal.setText("🌱 Soil: ERR");
+                    tvProbeMoistureVal.setText("Soil: ERROR");
+                    tvProbeMoistureVal.setTextColor(Color.parseColor("#DC2626"));
                     isProbing = false;
                 }
             });
@@ -154,56 +176,85 @@ public class MainActivity extends AppCompatActivity implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
 
-        String requestedMode = getIntent().getStringExtra(LandingActivity.EXTRA_CONTROL_MODE);
-        if (requestedMode != null) {
-            activeMode = requestedMode;
-        }
-
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         config = new RoverConfig(this);
         apiClient = new RoverApiClient(config);
         streamer = new MjpegStreamer(config, this);
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        bindViews();
+        initViews();
         setupListeners();
+        setupSettingsTabValues();
 
-        applySpeed(65);
-        applySprayDuration(1000);
-        switchControlMode(activeMode);
+        // Default to Home Tab & Single Stick Architecture
+        switchNavigationTab(TAB_HOME);
+        switchControlMode(MODE_SINGLE_STICK);
+        applySpeed(currentSpeed);
+        applySprayDuration(currentSprayMs);
 
-        streamer.start();
-        mainHandler.postDelayed(pingRunnable, 1000);
+        mainHandler.post(pingRunnable);
     }
 
-    private void bindViews() {
+    private void initViews() {
+        // Top Bar
+        tvTopStatusBadge = findViewById(R.id.tv_top_status_badge);
+        tvTopPing = findViewById(R.id.tv_top_ping);
+        tvTopBattery = findViewById(R.id.tv_top_battery);
+
+        // Sections
+        sectionHome = findViewById(R.id.section_home);
+        sectionRemote = findViewById(R.id.section_remote);
+        sectionIntelligence = findViewById(R.id.section_intelligence);
+        sectionSettings = findViewById(R.id.section_settings);
+
+        // Bottom Nav Tabs
+        navTabHome = findViewById(R.id.nav_tab_home);
+        navTabRemote = findViewById(R.id.nav_tab_remote);
+        navTabIntelligence = findViewById(R.id.nav_tab_intelligence);
+        navTabSettings = findViewById(R.id.nav_tab_settings);
+
+        ivNavHome = findViewById(R.id.iv_nav_home);
+        ivNavRemote = findViewById(R.id.iv_nav_remote);
+        ivNavIntelligence = findViewById(R.id.iv_nav_intelligence);
+        ivNavSettings = findViewById(R.id.iv_nav_settings);
+
+        tvNavHome = findViewById(R.id.tv_nav_home);
+        tvNavRemote = findViewById(R.id.tv_nav_remote);
+        tvNavIntelligence = findViewById(R.id.tv_nav_intelligence);
+        tvNavSettings = findViewById(R.id.tv_nav_settings);
+
+        // Home Section
+        tvHomeIp = findViewById(R.id.tv_home_ip);
+        tvHomeSoilVal = findViewById(R.id.tv_home_soil_val);
+        tvHomeSoilDesc = findViewById(R.id.tv_home_soil_desc);
+        tvHomeMotionTag = findViewById(R.id.tv_home_motion_tag);
+        btnHomeStartControl = findViewById(R.id.btn_home_start_control);
+        cardHomeSoil = findViewById(R.id.card_home_soil);
+        cardHomeModeDual = findViewById(R.id.card_home_mode_dual);
+        cardHomeModeSingle = findViewById(R.id.card_home_mode_single);
+        cardHomeModeDpad = findViewById(R.id.card_home_mode_dpad);
+
+        // Remote Section
         ivCameraStream = findViewById(R.id.iv_camera_stream);
         layoutStreamPlaceholder = findViewById(R.id.layout_stream_placeholder);
         tvStreamStatus = findViewById(R.id.tv_stream_status);
-        tvStreamTarget = findViewById(R.id.tv_stream_target);
-        btnRetryStream = findViewById(R.id.btn_retry_stream);
         tvHudFps = findViewById(R.id.tv_hud_fps);
-        tvHudPing = findViewById(R.id.tv_hud_ping);
-        tvHudConnBadge = findViewById(R.id.tv_hud_conn_badge);
         tvHudMotionVector = findViewById(R.id.tv_hud_motion_vector);
         tvSprayAlertBanner = findViewById(R.id.tv_spray_alert_banner);
+        tvProbeMoistureVal = findViewById(R.id.tv_probe_moisture_val);
+        btnRetryStream = findViewById(R.id.btn_retry_stream);
         btnRotateStream = findViewById(R.id.btn_rotate_stream);
 
         leftSidePanel = findViewById(R.id.left_side_panel);
         rightSidePanel = findViewById(R.id.right_side_panel);
+        singleStickBottomPanel = findViewById(R.id.single_stick_bottom_panel);
         leftDualControls = findViewById(R.id.left_dual_controls);
         rightDualControls = findViewById(R.id.right_dual_controls);
         leftDpadControls = findViewById(R.id.left_dpad_controls);
         rightDpadControls = findViewById(R.id.right_dpad_controls);
-        singleStickBottomPanel = findViewById(R.id.single_stick_bottom_panel);
-
-        btnModeDualThumbs = findViewById(R.id.btn_mode_dual_thumbs);
-        btnModeSingleStick = findViewById(R.id.btn_mode_single_stick);
-        btnModeDpad = findViewById(R.id.btn_mode_dpad);
-        sbSpeed = findViewById(R.id.sb_speed);
 
         sliderThrottle = findViewById(R.id.slider_throttle);
         sliderSteering = findViewById(R.id.slider_steering);
-        sliderSteering.configure(AxisSliderView.ORIENTATION_HORIZONTAL, Color.parseColor("#2563EB"), "R ►", "◄ L");
+        sliderSteering.configure(AxisSliderView.ORIENTATION_HORIZONTAL, Color.parseColor("#FF6B4E"), "R", "L");
 
         tvDualSpeedVal = findViewById(R.id.tv_dual_speed_val);
         btnDualSpeed35 = findViewById(R.id.btn_dual_speed_35);
@@ -226,37 +277,83 @@ public class MainActivity extends AppCompatActivity implements
         btnSingleSpray05 = findViewById(R.id.btn_single_spray_05);
         btnSingleSpray10 = findViewById(R.id.btn_single_spray_10);
         btnSingleSpray20 = findViewById(R.id.btn_single_spray_20);
-        tvProbeMoistureVal = findViewById(R.id.tv_probe_moisture_val);
-        btnSingleProbe = findViewById(R.id.btn_single_probe);
+
         btnSingleFlash = findViewById(R.id.btn_single_flash);
+        btnSingleProbe = findViewById(R.id.btn_single_probe);
         btnSingleCalib = findViewById(R.id.btn_single_calib);
         btnSingleEstop = findViewById(R.id.btn_single_estop);
 
         btnSideFlash = findViewById(R.id.btn_side_flash);
         btnSideProbe = findViewById(R.id.btn_side_probe);
         btnSideEstop = findViewById(R.id.btn_side_estop);
+
+        btnModeDualThumbs = findViewById(R.id.btn_mode_dual_thumbs);
+        btnModeSingleStick = findViewById(R.id.btn_mode_single_stick);
+        btnModeDpad = findViewById(R.id.btn_mode_dpad);
+        sbSpeed = findViewById(R.id.sb_speed);
+
+        // Intelligence Section
+        tvIntelMoistureLarge = findViewById(R.id.tv_intel_moisture_large);
+        tvIntelStatusBadge = findViewById(R.id.tv_intel_status_badge);
+        btnIntelTriggerProbe = findViewById(R.id.btn_intel_trigger_probe);
+
+        // Settings Section
+        sbSettingsProbeThreshold = findViewById(R.id.sb_settings_probe_threshold);
+        tvSettingsProbeThresholdVal = findViewById(R.id.tv_settings_probe_threshold_val);
+        sbSettingsTurnSens = findViewById(R.id.sb_settings_turn_sens);
+        tvSettingsTurnSensVal = findViewById(R.id.tv_settings_turn_sens_val);
+        sbSettingsTrim = findViewById(R.id.sb_settings_trim);
+        tvSettingsTrimVal = findViewById(R.id.tv_settings_trim_val);
+        cbSettingsInvertThrottle = findViewById(R.id.cb_settings_invert_throttle);
+        cbSettingsInvertSteer = findViewById(R.id.cb_settings_invert_steer);
+        etSettingsHost = findViewById(R.id.et_settings_host);
+        etSettingsCtrlPort = findViewById(R.id.et_settings_ctrl_port);
+        etSettingsStreamPort = findViewById(R.id.et_settings_stream_port);
+        etSettingsSprayMs = findViewById(R.id.et_settings_spray_ms);
+        btnSettingsReset = findViewById(R.id.btn_settings_reset);
+        btnSettingsSave = findViewById(R.id.btn_settings_save);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupListeners() {
-        findViewById(R.id.btn_back_landing).setOnClickListener(v -> finish());
-        findViewById(R.id.btn_settings).setOnClickListener(v -> showSettingsDialog());
-        btnSingleCalib.setOnClickListener(v -> showSettingsDialog());
-        tvProbeMoistureVal.setOnClickListener(v -> showSettingsDialog());
+        // Bottom Navigation Bar
+        navTabHome.setOnClickListener(v -> switchNavigationTab(TAB_HOME));
+        navTabRemote.setOnClickListener(v -> switchNavigationTab(TAB_REMOTE));
+        navTabIntelligence.setOnClickListener(v -> switchNavigationTab(TAB_INTELLIGENCE));
+        navTabSettings.setOnClickListener(v -> switchNavigationTab(TAB_SETTINGS));
+
+        // Home Actions
+        btnHomeStartControl.setOnClickListener(v -> switchNavigationTab(TAB_REMOTE));
+        cardHomeSoil.setOnClickListener(v -> switchNavigationTab(TAB_INTELLIGENCE));
+        cardHomeModeDual.setOnClickListener(v -> {
+            switchControlMode(MODE_DUAL_THUMBS);
+            switchNavigationTab(TAB_REMOTE);
+        });
+        cardHomeModeSingle.setOnClickListener(v -> {
+            switchControlMode(MODE_SINGLE_STICK);
+            switchNavigationTab(TAB_REMOTE);
+        });
+        cardHomeModeDpad.setOnClickListener(v -> {
+            switchControlMode(MODE_DPAD);
+            switchNavigationTab(TAB_REMOTE);
+        });
+
+        // Remote Camera Controls
         btnRetryStream.setOnClickListener(v -> {
             tvStreamStatus.setText("Reconnecting...");
             streamer.restart();
         });
-
         btnRotateStream.setOnClickListener(v -> {
             streamRotationDeg = (streamRotationDeg + 90) % 360;
-            btnRotateStream.setText(String.format(Locale.US, "🔄 %d°", streamRotationDeg));
+            btnRotateStream.setText(String.format(Locale.US, "ROTATE %d°", streamRotationDeg));
         });
 
-        btnModeDualThumbs.setOnClickListener(v -> switchControlMode(LandingActivity.MODE_DUAL_THUMBS));
-        btnModeSingleStick.setOnClickListener(v -> switchControlMode(LandingActivity.MODE_SINGLE_STICK));
-        btnModeDpad.setOnClickListener(v -> switchControlMode(LandingActivity.MODE_DPAD));
+        // Driving Modes
+        btnModeDualThumbs.setOnClickListener(v -> switchControlMode(MODE_DUAL_THUMBS));
+        btnModeSingleStick.setOnClickListener(v -> switchControlMode(MODE_SINGLE_STICK));
+        btnModeDpad.setOnClickListener(v -> switchControlMode(MODE_DPAD));
 
+        // Speed Controls
         btnDualSpeed35.setOnClickListener(v -> applySpeed(35));
         btnDualSpeed65.setOnClickListener(v -> applySpeed(65));
         btnDualSpeed100.setOnClickListener(v -> applySpeed(100));
@@ -273,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
+        // Spray Controls
         btnDualSpray.setOnClickListener(v -> triggerChemicalSpray());
         btnSingleSpray.setOnClickListener(v -> triggerChemicalSpray());
         btnDualSpray05.setOnClickListener(v -> applySprayDuration(500));
@@ -282,22 +380,89 @@ public class MainActivity extends AppCompatActivity implements
         btnSingleSpray10.setOnClickListener(v -> applySprayDuration(1000));
         btnSingleSpray20.setOnClickListener(v -> applySprayDuration(2000));
 
+        // Auxiliary Utilities
         btnSideFlash.setOnClickListener(v -> toggleFlash());
         btnSingleFlash.setOnClickListener(v -> toggleFlash());
         btnSideProbe.setOnClickListener(v -> triggerSoilProbe());
         btnSingleProbe.setOnClickListener(v -> triggerSoilProbe());
+        btnSingleCalib.setOnClickListener(v -> switchNavigationTab(TAB_SETTINGS));
         btnSideEstop.setOnClickListener(v -> emergencyStop());
         btnSingleEstop.setOnClickListener(v -> emergencyStop());
+        tvProbeMoistureVal.setOnClickListener(v -> switchNavigationTab(TAB_INTELLIGENCE));
 
+        // Axis Sliders
         AxisSliderView.AxisListener dualAxisListener = val ->
                 dispatchAxisKinematics(sliderThrottle.getValue(), sliderSteering.getValue());
         sliderThrottle.setListener(dualAxisListener);
         sliderSteering.setListener(dualAxisListener);
 
+        // D-Pad Touch Listeners
         bindDpadButton(findViewById(R.id.btn_dpad_fwd), true, 1f);
         bindDpadButton(findViewById(R.id.btn_dpad_rev), true, -1f);
         bindDpadButton(findViewById(R.id.btn_dpad_left), false, -1f);
         bindDpadButton(findViewById(R.id.btn_dpad_right), false, 1f);
+
+        // Intelligence Tab Actions
+        btnIntelTriggerProbe.setOnClickListener(v -> triggerSoilProbe());
+
+        // Settings Tab Listeners
+        setupSettingsTabListeners();
+    }
+
+    private void switchNavigationTab(int tabIndex) {
+        activeTab = tabIndex;
+        vibrate(20);
+
+        sectionHome.setVisibility(tabIndex == TAB_HOME ? View.VISIBLE : View.GONE);
+        sectionRemote.setVisibility(tabIndex == TAB_REMOTE ? View.VISIBLE : View.GONE);
+        sectionIntelligence.setVisibility(tabIndex == TAB_INTELLIGENCE ? View.VISIBLE : View.GONE);
+        sectionSettings.setVisibility(tabIndex == TAB_SETTINGS ? View.VISIBLE : View.GONE);
+
+        int activeColor = Color.parseColor("#FF6B4E");
+        int mutedColor = Color.parseColor("#A49C96");
+
+        ivNavHome.setColorFilter(tabIndex == TAB_HOME ? activeColor : mutedColor);
+        tvNavHome.setTextColor(tabIndex == TAB_HOME ? activeColor : mutedColor);
+
+        ivNavRemote.setColorFilter(tabIndex == TAB_REMOTE ? activeColor : mutedColor);
+        tvNavRemote.setTextColor(tabIndex == TAB_REMOTE ? activeColor : mutedColor);
+
+        ivNavIntelligence.setColorFilter(tabIndex == TAB_INTELLIGENCE ? activeColor : mutedColor);
+        tvNavIntelligence.setTextColor(tabIndex == TAB_INTELLIGENCE ? activeColor : mutedColor);
+
+        ivNavSettings.setColorFilter(tabIndex == TAB_SETTINGS ? activeColor : mutedColor);
+        tvNavSettings.setTextColor(tabIndex == TAB_SETTINGS ? activeColor : mutedColor);
+
+        if (tabIndex == TAB_REMOTE) {
+            if (streamer != null) streamer.start();
+        }
+    }
+
+    private void switchControlMode(String mode) {
+        activeMode = mode;
+        emergencyStopQuiet();
+
+        boolean isDual = MODE_DUAL_THUMBS.equals(mode);
+        boolean isSingle = MODE_SINGLE_STICK.equals(mode);
+        boolean isDpad = MODE_DPAD.equals(mode);
+
+        leftSidePanel.setVisibility(isSingle ? View.GONE : View.VISIBLE);
+        rightSidePanel.setVisibility(isSingle ? View.GONE : View.VISIBLE);
+        singleStickBottomPanel.setVisibility(isSingle ? View.VISIBLE : View.GONE);
+
+        leftDualControls.setVisibility(isDual ? View.VISIBLE : View.GONE);
+        rightDualControls.setVisibility(isDual ? View.VISIBLE : View.GONE);
+        leftDpadControls.setVisibility(isDpad ? View.VISIBLE : View.GONE);
+        rightDpadControls.setVisibility(isDpad ? View.VISIBLE : View.GONE);
+
+        styleModeButton(btnModeDualThumbs, isDual);
+        styleModeButton(btnModeSingleStick, isSingle);
+        styleModeButton(btnModeDpad, isDpad);
+    }
+
+    private void styleModeButton(Button btn, boolean active) {
+        btn.setBackgroundResource(active ? R.drawable.bg_button_tactical_active : R.drawable.bg_button_tactical);
+        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#78706B"));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -317,9 +482,10 @@ public class MainActivity extends AppCompatActivity implements
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     v.setBackgroundResource(R.drawable.bg_button_tactical);
-                    ((Button) v).setTextColor(Color.parseColor(isThrottle ? "#059669" : "#2563EB"));
+                    ((Button) v).setTextColor(Color.parseColor("#23201E"));
                     if (isThrottle) dpadThrottle = 0f;
                     else dpadSteer = 0f;
+
                     if (dpadThrottle == 0f && dpadSteer == 0f) {
                         mainHandler.removeCallbacks(dpadDispatchLoop);
                         onMotionStop();
@@ -332,36 +498,8 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    private void switchControlMode(String mode) {
-        activeMode = mode;
-        emergencyStopQuiet();
-
-        boolean isDual = LandingActivity.MODE_DUAL_THUMBS.equals(mode);
-        boolean isSingle = LandingActivity.MODE_SINGLE_STICK.equals(mode);
-        boolean isDpad = LandingActivity.MODE_DPAD.equals(mode);
-
-        leftSidePanel.setVisibility(isSingle ? View.GONE : View.VISIBLE);
-        rightSidePanel.setVisibility(isSingle ? View.GONE : View.VISIBLE);
-        singleStickBottomPanel.setVisibility(isSingle ? View.VISIBLE : View.GONE);
-
-        leftDualControls.setVisibility(isDual ? View.VISIBLE : View.GONE);
-        rightDualControls.setVisibility(isDual ? View.VISIBLE : View.GONE);
-        leftDpadControls.setVisibility(isDpad ? View.VISIBLE : View.GONE);
-        rightDpadControls.setVisibility(isDpad ? View.VISIBLE : View.GONE);
-
-        styleModeButton(btnModeDualThumbs, isDual);
-        styleModeButton(btnModeSingleStick, isSingle);
-        styleModeButton(btnModeDpad, isDpad);
-    }
-
-    private void styleModeButton(Button btn, boolean active) {
-        btn.setBackgroundResource(active ? R.drawable.bg_button_tactical_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#475569"));
-    }
-
     private void dispatchAxisKinematics(float throttle, float steer) {
         if (isProbing) {
-            // Mechanical Interlock (Firmware ab9c802a & API Spec 4.1): Rover immobilized during probe extension
             tvHudMotionVector.setText("🔒 DRIVE LOCKED | SOIL PROBE ACTIVE");
             return;
         }
@@ -375,13 +513,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onMotionUpdate(int leftPwm, int rightPwm, float throttle, float steer, String vectorText) {
+        if (isProbing) return;
         tvHudMotionVector.setText(String.format(Locale.US, "%s | L:%d R:%d", vectorText, leftPwm, rightPwm));
+        tvHomeMotionTag.setText(leftPwm == 0 && rightPwm == 0 ? "STOPPED" : "ACTIVE");
         apiClient.sendDriveCommand(leftPwm, rightPwm, null);
     }
 
     @Override
     public void onMotionStop() {
-        tvHudMotionVector.setText("■ STOPPED | L:0 R:0");
+        tvHudMotionVector.setText("STOPPED | L:0 R:0");
+        tvHomeMotionTag.setText("STOPPED");
         apiClient.sendDriveCommand(0, 0, null);
     }
 
@@ -391,7 +532,7 @@ public class MainActivity extends AppCompatActivity implements
         sbSpeed.setProgress(currentSpeed);
 
         String tag = currentSpeed == 35 ? "SLOW" : (currentSpeed == 65 ? "MED" : (currentSpeed == 100 ? "FAST" : "CUSTOM"));
-        tvDualSpeedVal.setText(String.format(Locale.US, "%d%%", currentSpeed));
+        tvDualSpeedVal.setText(String.format(Locale.US, "%d%% (%s)", currentSpeed, tag));
         tvSingleSpeedVal.setText(String.format(Locale.US, "%d%% (%s)", currentSpeed, tag));
 
         styleSpeedBtn(btnDualSpeed35, currentSpeed == 35);
@@ -404,14 +545,14 @@ public class MainActivity extends AppCompatActivity implements
 
     private void styleSpeedBtn(Button btn, boolean active) {
         btn.setBackgroundResource(active ? R.drawable.bg_button_tactical_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#475569"));
+        btn.setTextColor(Color.parseColor(active ? "#FFFFFF" : "#78706B"));
     }
 
     private void applySprayDuration(int ms) {
         currentSprayMs = ms;
         String secLabel = String.format(Locale.US, "%.1fs", ms / 1000f);
-        btnDualSpray.setText(String.format(Locale.US, "💦 SPRAY (%s)", secLabel));
-        btnSingleSpray.setText(String.format(Locale.US, "💦 SPRAY BURST (%s)", secLabel));
+        btnDualSpray.setText(String.format(Locale.US, "SPRAY (%s)", secLabel));
+        btnSingleSpray.setText(String.format(Locale.US, "SPRAY BURST (%s)", secLabel));
 
         styleSprayPill(btnDualSpray05, ms == 500);
         styleSprayPill(btnDualSpray10, ms == 1000);
@@ -423,21 +564,21 @@ public class MainActivity extends AppCompatActivity implements
 
     private void styleSprayPill(Button btn, boolean active) {
         btn.setBackgroundResource(active ? R.drawable.bg_button_spray_pill_active : R.drawable.bg_button_tactical);
-        btn.setTextColor(Color.parseColor(active ? "#2563EB" : "#475569"));
+        btn.setTextColor(Color.parseColor(active ? "#FF6B4E" : "#78706B"));
     }
 
     private void triggerChemicalSpray() {
         if (isSprayActive) return;
         isSprayActive = true;
-        vibrate(70);
+        vibrate(60);
 
         tvSprayAlertBanner.setVisibility(View.VISIBLE);
-        tvSprayAlertBanner.setText(String.format(Locale.US, "💦 SPRAY ACTIVE (%dms)", currentSprayMs));
+        tvSprayAlertBanner.setText(String.format(Locale.US, "CHEMICAL SPRAY ACTIVE (%dms)", currentSprayMs));
 
         apiClient.triggerSpray(currentSprayMs, new RoverApiClient.ApiCallback() {
             @Override public void onSuccess(String responseText) {}
             @Override public void onError(String errorMessage) {
-                Toast.makeText(MainActivity.this, "Spray error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Spray: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -458,9 +599,9 @@ public class MainActivity extends AppCompatActivity implements
             btnSingleFlash.setTextColor(Color.parseColor("#92400E"));
         } else {
             btnSideFlash.setBackgroundResource(R.drawable.bg_button_tactical);
-            btnSideFlash.setTextColor(Color.parseColor("#64748B"));
+            btnSideFlash.setTextColor(Color.parseColor("#78706B"));
             btnSingleFlash.setBackgroundResource(R.drawable.bg_button_tactical);
-            btnSingleFlash.setTextColor(Color.parseColor("#64748B"));
+            btnSingleFlash.setTextColor(Color.parseColor("#78706B"));
         }
 
         apiClient.setFlash(flashBrightness, null);
@@ -472,8 +613,8 @@ public class MainActivity extends AppCompatActivity implements
         vibrate(50);
         emergencyStopQuiet();
         tvHudMotionVector.setText("🔒 DRIVE LOCKED | SOIL PROBE ACTIVE");
-        tvProbeMoistureVal.setText("🌱 Soil: LOWERING PROBE 50mm...");
-        tvProbeMoistureVal.setTextColor(Color.parseColor("#2563EB"));
+        tvProbeMoistureVal.setText("Soil: PROBING 50mm...");
+        tvProbeMoistureVal.setTextColor(Color.parseColor("#FF6B4E"));
 
         apiClient.triggerProbe(new RoverApiClient.ApiCallback() {
             @Override
@@ -483,10 +624,10 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onError(String errorMessage) {
-                tvProbeMoistureVal.setText("🌱 Soil: PROBE FAIL (" + errorMessage + ")");
+                tvProbeMoistureVal.setText("Soil: FAIL (" + errorMessage + ")");
                 tvProbeMoistureVal.setTextColor(Color.parseColor("#DC2626"));
                 isProbing = false;
-                tvHudMotionVector.setText("■ STOPPED | L:0 R:0");
+                tvHudMotionVector.setText("STOPPED | L:0 R:0");
             }
         });
     }
@@ -496,17 +637,30 @@ public class MainActivity extends AppCompatActivity implements
         if (!status.idle) {
             isProbing = true;
             tvHudMotionVector.setText("🔒 DRIVE LOCKED | " + (status.status != null ? status.status.toUpperCase(Locale.US) : "PROBING"));
-            String statusMsg = status.status != null ? status.status : "Sampling subsurface...";
-            tvProbeMoistureVal.setText(String.format(Locale.US, "🌱 Soil: %s (%d%%)", statusMsg, status.percent));
-            tvProbeMoistureVal.setTextColor(Color.parseColor("#2563EB"));
+            String statusMsg = status.status != null ? status.status : "Sampling...";
+            tvProbeMoistureVal.setText(String.format(Locale.US, "Soil: %s (%d%%)", statusMsg, status.percent));
+            tvProbeMoistureVal.setTextColor(Color.parseColor("#FF6B4E"));
         } else {
             isProbing = false;
-            tvHudMotionVector.setText("■ STOPPED | L:0 R:0");
+            tvHudMotionVector.setText("STOPPED | L:0 R:0");
+            lastReportedMoisture = status.percent;
+
             String condition = status.dry ? "DRY (Hydrated)" : "OPTIMAL";
             String detail = status.status != null ? status.status : condition;
-            tvProbeMoistureVal.setText(String.format(Locale.US, "🌱 Soil: %d%% | Limit: %d%% (%s)",
+
+            // Update Cockpit Chip
+            tvProbeMoistureVal.setText(String.format(Locale.US, "Soil: %d%% | Limit: %d%% (%s)",
                     status.percent, status.threshold, detail));
-            tvProbeMoistureVal.setTextColor(Color.parseColor(status.dry ? "#D97706" : "#059669"));
+            tvProbeMoistureVal.setTextColor(Color.parseColor(status.dry ? "#D97706" : "#2E7D5B"));
+
+            // Update Home Snapshot
+            tvHomeSoilVal.setText(String.format(Locale.US, "%d%%", status.percent));
+            tvHomeSoilDesc.setText(status.dry ? "Dry • Hydrated" : "Optimal Moisture");
+
+            // Update Intelligence Dashboard
+            tvIntelMoistureLarge.setText(String.format(Locale.US, "%d%%", status.percent));
+            tvIntelStatusBadge.setText(status.dry ? "HYDRATED" : "OPTIMAL");
+            tvIntelStatusBadge.setTextColor(Color.parseColor(status.dry ? "#D97706" : "#2E7D5B"));
         }
     }
 
@@ -521,156 +675,104 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void emergencyStop() {
-        vibrate(110);
+        vibrate(120);
         emergencyStopQuiet();
-        tvHudMotionVector.setText("■ E-STOP | L:0 R:0");
-        Toast.makeText(this, "🛑 EMERGENCY STOP ASSERTED", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onStreamConnected(String url) {
-        layoutStreamPlaceholder.setVisibility(View.GONE);
-        ivCameraStream.setVisibility(View.VISIBLE);
-        setConnected(true);
-    }
-
-    @Override
-    public void onNewFrame(Bitmap bitmap, int fps) {
-        if (streamRotationDeg != 0) {
-            Matrix m = new Matrix();
-            m.postRotate(streamRotationDeg);
-            Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
-            ivCameraStream.setImageBitmap(rotated);
-        } else {
-            ivCameraStream.setImageBitmap(bitmap);
-        }
-        tvHudFps.setText(String.format(Locale.US, "%d FPS", fps));
-    }
-
-    @Override
-    public void onStreamError(String message) {
-        tvStreamStatus.setText(String.format(Locale.US, "Connecting (%s)...", message));
-        tvStreamTarget.setText(config.getStreamUrl());
-    }
-
-    @Override
-    public void onStreamDisconnected() {
-        ivCameraStream.setVisibility(View.GONE);
-        layoutStreamPlaceholder.setVisibility(View.VISIBLE);
-        tvHudFps.setText("0 FPS");
-        setConnected(false);
+        tvHudMotionVector.setText("E-STOP ASSERTED");
+        Toast.makeText(this, "EMERGENCY STOP ASSERTED", Toast.LENGTH_SHORT).show();
     }
 
     private void updateConnectionStatus(boolean success, long latencyMs) {
-        setConnected(success);
-        tvHudPing.setText(success ? String.format(Locale.US, "%d ms", latencyMs) : "-- ms");
+        if (success) {
+            tvTopStatusBadge.setText("ONLINE");
+            tvTopStatusBadge.setTextColor(Color.parseColor("#2E7D5B"));
+            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_status_badge);
+            tvTopPing.setText(String.format(Locale.US, "%d ms", latencyMs));
+        } else {
+            tvTopStatusBadge.setText("OFFLINE");
+            tvTopStatusBadge.setTextColor(Color.parseColor("#DC2626"));
+            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_button_estop);
+            tvTopPing.setText("-- ms");
+        }
     }
 
-    private void setConnected(boolean connected) {
-        tvHudConnBadge.setText(connected ? "ONLINE" : "OFFLINE");
-        tvHudConnBadge.setTextColor(Color.parseColor(connected ? "#059669" : "#DC2626"));
-        tvHudConnBadge.setBackgroundResource(connected ? R.drawable.bg_status_badge : R.drawable.bg_button_tactical);
-    }
-
-    @SuppressLint("InflateParams")
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_settings, null);
-        builder.setView(dialogView);
-
-        AlertDialog dialog = builder.create();
-
-        SeekBar sbTurnSens = dialogView.findViewById(R.id.sb_dialog_turn_sens);
-        TextView tvTurnSensVal = dialogView.findViewById(R.id.tv_dialog_turn_sens_val);
-        SeekBar sbTrim = dialogView.findViewById(R.id.sb_dialog_trim);
-        TextView tvTrimVal = dialogView.findViewById(R.id.tv_dialog_trim_val);
-        CheckBox cbInvertThrottle = dialogView.findViewById(R.id.cb_invert_throttle);
-        CheckBox cbInvertSteer = dialogView.findViewById(R.id.cb_invert_steer);
-
-        EditText etHost = dialogView.findViewById(R.id.et_dialog_host);
-        EditText etCtrlPort = dialogView.findViewById(R.id.et_dialog_ctrl_port);
-        EditText etStreamPort = dialogView.findViewById(R.id.et_dialog_stream_port);
-        EditText etSprayMs = dialogView.findViewById(R.id.et_dialog_spray_ms);
-        SeekBar sbProbeThreshold = dialogView.findViewById(R.id.sb_dialog_probe_threshold);
-        TextView tvProbeThresholdVal = dialogView.findViewById(R.id.tv_dialog_probe_threshold_val);
-
-        Button btnReset = dialogView.findViewById(R.id.btn_dialog_reset);
-        Button btnSave = dialogView.findViewById(R.id.btn_dialog_save);
-
+    private void setupSettingsTabValues() {
         float currentSens = config.getTurnSensitivity();
-        sbTurnSens.setProgress(Math.round((currentSens - 0.30f) * 100f));
-        tvTurnSensVal.setText(String.format(Locale.US, "%.2fx", currentSens));
+        sbSettingsTurnSens.setProgress(Math.round((currentSens - 0.30f) * 100f));
+        tvSettingsTurnSensVal.setText(String.format(Locale.US, "%.2fx", currentSens));
 
         int currentTrim = config.getSteeringTrim();
-        sbTrim.setProgress(currentTrim + 25);
-        tvTrimVal.setText(String.format(Locale.US, "%s%d%%", (currentTrim > 0 ? "+" : ""), currentTrim));
-
-        cbInvertThrottle.setChecked(config.isInvertThrottle());
-        cbInvertSteer.setChecked(config.isInvertSteer());
-
-        etHost.setText(config.getHost());
-        etCtrlPort.setText(String.valueOf(config.getCtrlPort()));
-        etStreamPort.setText(String.valueOf(config.getStreamPort()));
-        etSprayMs.setText(String.valueOf(config.getSprayMs()));
+        sbSettingsTrim.setProgress(currentTrim + 25);
+        tvSettingsTrimVal.setText(String.format(Locale.US, "%s%d%%", (currentTrim > 0 ? "+" : ""), currentTrim));
 
         int currentThreshold = config.getProbeThreshold();
-        sbProbeThreshold.setProgress(Math.max(0, Math.min(70, currentThreshold - 10)));
-        tvProbeThresholdVal.setText(String.format(Locale.US, "%d%%", currentThreshold));
+        sbSettingsProbeThreshold.setProgress(Math.max(0, Math.min(70, currentThreshold - 10)));
+        tvSettingsProbeThresholdVal.setText(String.format(Locale.US, "%d%%", currentThreshold));
 
-        sbProbeThreshold.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        cbSettingsInvertThrottle.setChecked(config.isInvertThrottle());
+        cbSettingsInvertSteer.setChecked(config.isInvertSteer());
+
+        etSettingsHost.setText(config.getHost());
+        etSettingsCtrlPort.setText(String.valueOf(config.getCtrlPort()));
+        etSettingsStreamPort.setText(String.valueOf(config.getStreamPort()));
+        etSettingsSprayMs.setText(String.valueOf(config.getSprayMs()));
+        tvHomeIp.setText(config.getHost() + " • AgriRover-CAM-AP");
+    }
+
+    private void setupSettingsTabListeners() {
+        sbSettingsTurnSens.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvProbeThresholdVal.setText(String.format(Locale.US, "%d%%", 10 + progress));
+                tvSettingsTurnSensVal.setText(String.format(Locale.US, "%.2fx", 0.30f + (progress / 100f)));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        sbTurnSens.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvTurnSensVal.setText(String.format(Locale.US, "%.2fx", 0.30f + (progress / 100f)));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        sbTrim.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        sbSettingsTrim.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 int val = progress - 25;
-                tvTrimVal.setText(String.format(Locale.US, "%s%d%%", (val > 0 ? "+" : ""), val));
+                tvSettingsTrimVal.setText(String.format(Locale.US, "%s%d%%", (val > 0 ? "+" : ""), val));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        btnReset.setOnClickListener(v -> {
-            config.resetDefaults();
-            dialog.dismiss();
-            streamer.restart();
-            Toast.makeText(this, "Settings reset", Toast.LENGTH_SHORT).show();
+        sbSettingsProbeThreshold.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvSettingsProbeThresholdVal.setText(String.format(Locale.US, "%d%%", 10 + progress));
+            }
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        btnSave.setOnClickListener(v -> {
-            config.setTurnSensitivity(0.30f + (sbTurnSens.getProgress() / 100f));
-            config.setSteeringTrim(sbTrim.getProgress() - 25);
-            config.setInvertThrottle(cbInvertThrottle.isChecked());
-            config.setInvertSteer(cbInvertSteer.isChecked());
-            config.setHost(etHost.getText().toString());
-            try { config.setCtrlPort(Integer.parseInt(etCtrlPort.getText().toString().trim())); } catch (Exception ignored) {}
-            try { config.setStreamPort(Integer.parseInt(etStreamPort.getText().toString().trim())); } catch (Exception ignored) {}
-            try { config.setSprayMs(Integer.parseInt(etSprayMs.getText().toString().trim())); } catch (Exception ignored) {}
-            int newThreshold = 10 + sbProbeThreshold.getProgress();
+        btnSettingsReset.setOnClickListener(v -> {
+            config.resetDefaults();
+            setupSettingsTabValues();
+            streamer.restart();
+            apiClient.setProbeThreshold(RoverConfig.DEFAULT_PROBE_THRESHOLD, null);
+            Toast.makeText(this, "Settings reset to defaults", Toast.LENGTH_SHORT).show();
+        });
+
+        btnSettingsSave.setOnClickListener(v -> {
+            config.setTurnSensitivity(0.30f + (sbSettingsTurnSens.getProgress() / 100f));
+            config.setSteeringTrim(sbSettingsTrim.getProgress() - 25);
+            int newThreshold = 10 + sbSettingsProbeThreshold.getProgress();
             config.setProbeThreshold(newThreshold);
             apiClient.setProbeThreshold(newThreshold, null);
 
-            dialog.dismiss();
-            streamer.restart();
-            Toast.makeText(this, "Settings applied", Toast.LENGTH_SHORT).show();
-        });
+            config.setInvertThrottle(cbSettingsInvertThrottle.isChecked());
+            config.setInvertSteer(cbSettingsInvertSteer.isChecked());
+            config.setHost(etSettingsHost.getText().toString());
+            try { config.setCtrlPort(Integer.parseInt(etSettingsCtrlPort.getText().toString().trim())); } catch (Exception ignored) {}
+            try { config.setStreamPort(Integer.parseInt(etSettingsStreamPort.getText().toString().trim())); } catch (Exception ignored) {}
+            try { config.setSprayMs(Integer.parseInt(etSettingsSprayMs.getText().toString().trim())); } catch (Exception ignored) {}
 
-        dialog.show();
+            tvHomeIp.setText(config.getHost() + " • AgriRover-CAM-AP");
+            streamer.restart();
+            Toast.makeText(this, "Settings saved & applied", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void vibrate(long ms) {
@@ -680,9 +782,35 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onStreamConnected(String url) {
+        layoutStreamPlaceholder.setVisibility(View.GONE);
+        ivCameraStream.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onNewFrame(Bitmap frame, int fps) {
+        ivCameraStream.setImageBitmap(frame);
+        tvHudFps.setText(String.format(Locale.US, "%d FPS", fps));
+    }
+
+    @Override
+    public void onStreamError(String message) {
+        layoutStreamPlaceholder.setVisibility(View.VISIBLE);
+        tvStreamStatus.setText(message);
+    }
+
+    @Override
+    public void onStreamDisconnected() {
+        layoutStreamPlaceholder.setVisibility(View.VISIBLE);
+        tvStreamStatus.setText("Stream Disconnected");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        if (streamer != null) streamer.start();
+        if (activeTab == TAB_REMOTE && streamer != null) {
+            streamer.start();
+        }
     }
 
     @Override

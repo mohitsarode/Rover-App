@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Land Rover Clean Automotive Light Palette -->
-    <color name="bg_main">#F4F6F9</color>
-    <color name="bg_dark">#F4F6F9</color>
+    <!-- Mars Rover Premium Warm & Futuristic Palette -->
+    <color name="bg_main">#FBF9F7</color>
+    <color name="bg_dark">#181514</color>
     <color name="bg_card">#FFFFFF</color>
-    <color name="bg_card_elevated">#F8FAFC</color>
-    <color name="bg_card_subtle">#F1F5F9</color>
-    <color name="bg_card_highlight">#E2E8F0</color>
+    <color name="bg_card_warm">#F7F3EF</color>
+    <color name="bg_card_elevated">#FAF6F3</color>
+    <color name="bg_card_highlight">#F3ECE5</color>
+    <color name="bg_glass">#D9FFFFFF</color>
+    
+    <color name="border_light">#EFEAE4</color>
+    <color name="border_subtle">#E5DCD4</color>
+    <color name="border_active">#FF6B4E</color>
 
-    <color name="border_light">#E2E8F0</color>
-    <color name="border_subtle">#CBD5E1</color>
-    <color name="border_active">#2563EB</color>
+    <!-- Coral & Warm Terracotta Gradient Accents -->
+    <color name="accent_coral">#FF6B4E</color>
+    <color name="accent_coral_start">#FF7E61</color>
+    <color name="accent_coral_end">#FF5232</color>
+    <color name="accent_coral_light">#FFF0EC</color>
+    <color name="accent_coral_glow">#FFA18C</color>
+    <color name="accent_coral_dark">#E04B28</color>
+    <color name="accent_coral_text">#D84315</color>
+    
+    <!-- Secondary Warm Accents -->
+    <color name="accent_peach">#FFA892</color>
+    <color name="accent_peach_bg">#FFF4F0</color>
+    <color name="accent_terracotta">#C65335</color>
+    <color name="accent_sand">#EDE3DB</color>
+    <color name="accent_sand_dark">#9C9088</color>
 
-    <!-- Luxury Automotive Accents -->
-    <color name="accent_green">#059669</color>
-    <color name="accent_green_glow">#10B981</color>
-    <color name="accent_green_dark">#047857</color>
-    <color name="accent_green_bg">#DCFCE7</color>
-    <color name="accent_green_text">#166534</color>
+    <!-- Status Indicators -->
+    <color name="status_online">#2E7D5B</color>
+    <color name="status_online_bg">#EBF5F0</color>
+    <color name="status_offline">#DC2626</color>
+    <color name="status_offline_bg">#FEE2E2</color>
+    <color name="status_warning">#D97706</color>
+    <color name="status_warning_bg">#FEF3C7</color>
 
-    <color name="accent_blue">#2563EB</color>
-    <color name="accent_blue_glow">#3B82F6</color>
-    <color name="accent_blue_dark">#1D4ED8</color>
-    <color name="accent_blue_bg">#DBEAFE</color>
-    <color name="accent_blue_text">#1E40AF</color>
-    <color name="accent_cyan">#0284C7</color>
+    <!-- Typography (Warm Slate & Deep Graphite) -->
+    <color name="text_title">#23201E</color>
+    <color name="text_body">#484340</color>
+    <color name="text_secondary">#78706B</color>
+    <color name="text_muted">#A49C96</color>
 
+    <!-- Backward compatibility color tokens -->
+    <color name="accent_green">#2E7D5B</color>
+    <color name="accent_green_glow">#4E9F76</color>
+    <color name="accent_green_dark">#1E563E</color>
+    <color name="accent_green_bg">#EBF5F0</color>
+    <color name="accent_green_text">#1E563E</color>
+    
+    <color name="accent_blue">#FF6B4E</color>
+    <color name="accent_blue_glow">#FFA18C</color>
+    <color name="accent_blue_dark">#E04B28</color>
+    <color name="accent_blue_bg">#FFF0EC</color>
+    <color name="accent_blue_text">#D84315</color>
+    <color name="accent_cyan">#FF6B4E</color>
+    
     <color name="accent_amber">#D97706</color>
     <color name="accent_amber_bg">#FEF3C7</color>
     <color name="accent_amber_text">#92400E</color>
-
+    
     <color name="accent_red">#DC2626</color>
     <color name="accent_red_bg">#FEE2E2</color>
     <color name="accent_red_text">#991B1B</color>
-
-    <!-- Typography (High-Contrast Crisp Slate & Charcoal) -->
-    <color name="text_title">#0F172A</color>
-    <color name="text_body">#1E293B</color>
-    <color name="text_secondary">#475569</color>
-    <color name="text_muted">#94A3B8</color>
-
-    <!-- Status Indicators -->
-    <color name="status_online">#059669</color>
-    <color name="status_offline">#DC2626</color>
-    <color name="status_connecting">#D97706</color>
 </resources>

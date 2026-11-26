@@ -16,10 +16,11 @@
         android:theme="@style/Theme.AgriRover"
         android:usesCleartextTraffic="true">
 
-        <!-- Landing Page: Control Mode Selection -->
+        <!-- Primary Futuristic Robotics Interface (Discover / Remote / Intelligence / Settings) -->
         <activity
-            android:name=".LandingActivity"
+            android:name=".MainActivity"
             android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -28,11 +29,10 @@
             </intent-filter>
         </activity>
 
-        <!-- Teleoperation Cockpit -->
+        <!-- Legacy Landing Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LandingActivity"
             android:exported="false"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" />
     </application>

@@ -15,7 +15,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 /**
- * Clean Land Rover Automotive 1D Pill-Shaped Axis Slider.
+ * Premium Futuristic 1D Pill-Shaped Axis Slider.
+ * Mars Rover aesthetic with warm coral & terracotta accents.
  */
 public class AxisSliderView extends View {
 
@@ -27,9 +28,9 @@ public class AxisSliderView extends View {
     }
 
     private int orientation = ORIENTATION_VERTICAL;
-    private int accentColor = Color.parseColor("#059669");
-    private String positiveLabel = "▲ FWD";
-    private String negativeLabel = "▼ REV";
+    private int accentColor = Color.parseColor("#FF6B4E");
+    private String positiveLabel = "FWD";
+    private String negativeLabel = "REV";
 
     private AxisListener listener;
     private float currentValue = 0f;
@@ -60,16 +61,16 @@ public class AxisSliderView extends View {
     }
 
     private void init() {
-        trackPaint.setColor(Color.parseColor("#F1F5F9"));
+        trackPaint.setColor(Color.parseColor("#F7F3EF"));
         trackPaint.setStyle(Paint.Style.FILL);
 
-        trackBorderPaint.setColor(Color.parseColor("#CBD5E1"));
+        trackBorderPaint.setColor(Color.parseColor("#E5DCD4"));
         trackBorderPaint.setStyle(Paint.Style.STROKE);
-        trackBorderPaint.setStrokeWidth(2.5f);
+        trackBorderPaint.setStrokeWidth(2f);
 
-        centerLinePaint.setColor(Color.parseColor("#94A3B8"));
+        centerLinePaint.setColor(Color.parseColor("#D4C8BF"));
         centerLinePaint.setStyle(Paint.Style.STROKE);
-        centerLinePaint.setStrokeWidth(2.5f);
+        centerLinePaint.setStrokeWidth(2f);
 
         thumbPaint.setColor(accentColor);
         thumbPaint.setStyle(Paint.Style.FILL);
@@ -77,8 +78,8 @@ public class AxisSliderView extends View {
         thumbCorePaint.setColor(Color.WHITE);
         thumbCorePaint.setStyle(Paint.Style.FILL);
 
-        labelPaint.setColor(Color.parseColor("#475569"));
-        labelPaint.setTextSize(26f);
+        labelPaint.setColor(Color.parseColor("#78706B"));
+        labelPaint.setTextSize(24f);
         labelPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         labelPaint.setTextAlign(Paint.Align.CENTER);
     }
@@ -118,7 +119,7 @@ public class AxisSliderView extends View {
         trackRect.set(pad, pad, w - pad, h - pad);
         float corner = Math.min(trackRect.width(), trackRect.height()) / 2f;
 
-        // Clean light track
+        // Clean warm track
         canvas.drawRoundRect(trackRect, corner, corner, trackPaint);
         canvas.drawRoundRect(trackRect, corner, corner, trackBorderPaint);
 
@@ -134,9 +135,9 @@ public class AxisSliderView extends View {
             canvas.drawLine(cx, cy - travel, cx, cy + travel, centerLinePaint);
             canvas.drawLine(cx - 14f, cy, cx + 14f, cy, centerLinePaint);
 
-            labelPaint.setColor(Color.parseColor("#059669"));
+            labelPaint.setColor(Color.parseColor("#FF6B4E"));
             canvas.drawText(positiveLabel, cx, 34f, labelPaint);
-            labelPaint.setColor(Color.parseColor("#DC2626"));
+            labelPaint.setColor(Color.parseColor("#A49C96"));
             canvas.drawText(negativeLabel, cx, h - 18f, labelPaint);
 
             drawThumb(canvas, cx, thumbY, thumbR);
@@ -148,19 +149,16 @@ public class AxisSliderView extends View {
             canvas.drawLine(cx - travel, cy, cx + travel, cy, centerLinePaint);
             canvas.drawLine(cx, cy - 14f, cx, cy + 14f, centerLinePaint);
 
-            labelPaint.setColor(Color.parseColor("#2563EB"));
-            canvas.drawText(negativeLabel, 38f, cy + 9f, labelPaint);
-            canvas.drawText(positiveLabel, w - 38f, cy + 9f, labelPaint);
+            labelPaint.setColor(Color.parseColor("#FF6B4E"));
+            canvas.drawText(negativeLabel, 36f, cy + 8f, labelPaint);
+            canvas.drawText(positiveLabel, w - 36f, cy + 8f, labelPaint);
 
             drawThumb(canvas, thumbX, cy, thumbR);
         }
     }
 
     private void drawThumb(Canvas canvas, float x, float y, float radius) {
-        int glowColor = isDragging ? 0x40059669 : 0x20059669;
-        if (orientation == ORIENTATION_HORIZONTAL) {
-            glowColor = isDragging ? 0x402563EB : 0x202563EB;
-        }
+        int glowColor = isDragging ? 0x4DFF6B4E : 0x26FF6B4E;
         glowPaint.setShader(new RadialGradient(x, y, radius * 1.5f, glowColor, Color.TRANSPARENT, Shader.TileMode.CLAMP));
         canvas.drawCircle(x, y, radius * 1.5f, glowPaint);
 
@@ -174,7 +172,7 @@ public class AxisSliderView extends View {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 isDragging = true;
-                updateValueFromTouch(event.getX(), event.getY());
+                processTouch(event.getX(), event.getY());
                 return true;
 
             case MotionEvent.ACTION_UP:
@@ -185,24 +183,24 @@ public class AxisSliderView extends View {
         return super.onTouchEvent(event);
     }
 
-    private void updateValueFromTouch(float tx, float ty) {
+    private void processTouch(float x, float y) {
         float w = getWidth();
         float h = getHeight();
-        float newVal;
-
         if (orientation == ORIENTATION_VERTICAL) {
             float thumbR = Math.min(w * 0.36f, 44f);
-            float travel = Math.max(1f, (h / 2f) - thumbR - 20f);
-            newVal = -((ty - (h / 2f)) / travel);
+            float travel = (h / 2f) - thumbR - 20f;
+            float cy = h / 2f;
+            float delta = cy - y;
+            currentValue = Math.max(-1f, Math.min(1f, delta / travel));
         } else {
             float thumbR = Math.min(h * 0.36f, 44f);
-            float travel = Math.max(1f, (w / 2f) - thumbR - 20f);
-            newVal = (tx - (w / 2f)) / travel;
+            float travel = (w / 2f) - thumbR - 20f;
+            float cx = w / 2f;
+            float delta = x - cx;
+            currentValue = Math.max(-1f, Math.min(1f, delta / travel));
         }
 
-        currentValue = Math.max(-1f, Math.min(1f, newVal));
         invalidate();
-
         if (listener != null) {
             listener.onAxisChanged(currentValue);
         }
