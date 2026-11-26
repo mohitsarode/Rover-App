@@ -685,12 +685,12 @@ public class MainActivity extends AppCompatActivity implements
         if (success) {
             tvTopStatusBadge.setText("ONLINE");
             tvTopStatusBadge.setTextColor(Color.parseColor("#2E7D5B"));
-            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_status_badge);
+            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_badge_online);
             tvTopPing.setText(String.format(Locale.US, "%d ms", latencyMs));
         } else {
             tvTopStatusBadge.setText("OFFLINE");
             tvTopStatusBadge.setTextColor(Color.parseColor("#DC2626"));
-            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_button_estop);
+            tvTopStatusBadge.setBackgroundResource(R.drawable.bg_badge_offline);
             tvTopPing.setText("-- ms");
         }
     }
